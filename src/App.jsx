@@ -18,6 +18,9 @@ const {
   STATS,
 } = APP_STRINGS;
 
+// BASE_URL is '/' locally and '/<repo>/' on GitHub Pages, so the logo resolves in both.
+const LOGO_SRC = `${import.meta.env.BASE_URL}favicon.jpg`;
+
 const PHASE_LABELS = PHASE_STRINGS.LABELS;
 const STAGE_NAMES = SPECIMEN.STAGE_NAMES;
 
@@ -113,7 +116,7 @@ export default function App() {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden border border-outline-variant/50 shadow-xs">
                 <img
-                  src="/favicon.jpg"
+                  src={LOGO_SRC}
                   alt={BRAND.LOGO_ALT}
                   className="w-full h-full object-cover"
                 />
@@ -726,7 +729,7 @@ export default function App() {
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-on-surface-variant">
           <div className="flex items-center gap-2">
             <img
-              src="/favicon.jpg"
+              src={LOGO_SRC}
               alt={BRAND.LOGO_ALT}
               className="w-5 h-5 rounded-md object-cover shadow-xs border border-outline-variant/50"
             />

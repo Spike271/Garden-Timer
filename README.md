@@ -1,91 +1,184 @@
-# Garden Timer
+<p align="center">
+  <img src="public/favicon.jpg" alt="Garden Timer logo" width="96" />
+</p>
 
-Garden Timer is a mindful botanical Pomodoro focus application for the web. It pairs focus sessions with generative algorithmic botanical growth and real-time celestial lighting (sun and moon cycles synchronized to local time). Completing focus intervals nurtures a blooming tree, while skipping sessions gently wilts the plant, providing calm positive reinforcement without abrasive timers or high-stress gamification.
+<h1 align="center">Garden Timer</h1>
 
----
-
-## Tech Stack & Architecture
-
-- **Language:** JavaScript (ES Modules / JSX)
-- **Framework & Libraries:** React 18 (`react`, `react-dom`), HTML5 Canvas
-- **Styling & Fonts:** Tailwind CSS (CDN), Material Symbols, Google Fonts (_Newsreader_, _Plus Jakarta Sans_)
-- **Build Tool & Bundler:** Vite 8 (`@vitejs/plugin-react`)
-- **Package Manager:** npm (configured via `package.json` and `package-lock.json`)
-- **Linter:** Oxlint (`.oxlintrc.json`)
+<p align="center"><em>A Pomodoro timer where your plant is the progress bar.</em></p>
 
 ---
 
-## Entry Points
+## About the Project
 
-The project is structured with multi-page entry points configured in `vite.config.js`:
+Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish a focus session and your plant grows a stage, from seed to sprout to sapling to bloom. Forfeit one and it wilts. The sky behind the plant follows your local clock, with a sun by day, a moon and stars at night, and dawn and golden-hour light in between. The goal is a garden full of blooms, with no streak pressure and no alarms.
 
-- `index.html` — Standalone landing and visual timer experience with built-in canvas and session controls.
-- `app.html` — Full React application entry mounting `/src/main.jsx`.
-- `src/main.jsx` — React root rendering `<App />` wrapped with `SettingsProvider` and `GardenProvider`.
-- Rewrites: Requests to `/garden-timer` or `/app` in development are redirected to `/app.html`.
+## Screenshots
 
----
+![Growth stages: seed, sprout, sapling, bloom, and a wilted sapling](docs/growth-stages.png)
 
-## Prerequisites & Requirements
+![The same bloom at dawn, midday, golden hour and night](docs/sky-cycle.png)
 
-- **Node.js:** Node.js 18.x or later (recommended: Node.js 20+ LTS)
-- **Package Manager:** `npm` (v9+) or compatible package manager (`pnpm`, `yarn`)
-- Modern web browser with HTML5 Canvas support
+## Features
 
----
+- **Pomodoro cycle** — focus, short break, focus, … with a long break after every 4th completed focus session.
+- **Editable focus length** — presets of 25, 45 and 50 minutes, plus a ±5 minute stepper (1–180 min). Saved locally and applied from the next session.
+- **Procedural plant** — a recursive branch renderer draws four growth stages with a gentle idle sway. No sprite art.
+- **Wilt and recovery** — a forfeited focus session drops the plant one stage and wilts it. The next completed session heals it.
+- **A garden, not one plant** — after a healthy bloom, the next completed session plants a new seed beside it. Every plant stays on screen.
+- **Real-time sky** — sun, moon, stars and four sky bands driven by your local time, moving smoothly along an arc.
+- **Live weather** in the header (see [Network and privacy](#network-and-privacy)).
+- **Drift-proof timer** — it stores an absolute end time, so throttled background tabs can't skew the countdown.
+- **Landing page** with an interactive timelapse that runs a tree through a day.
+- **Local-only** — no accounts and no backend. Your garden lives in `localStorage`.
 
-## Getting Started
+## Technologies Used
 
-### 1. Clone & Install Dependencies
+- **Language:** JavaScript (ES modules, JSX)
+- **UI:** React 18 and the HTML5 Canvas 2D API
+- **Build:** Vite 8 with `@vitejs/plugin-react`
+- **Styling:** Tailwind CSS (CDN), Google Fonts (Newsreader, Plus Jakarta Sans, Material Symbols)
+- **Tooling:** Oxlint and Oxfmt
+- **Hosting:** GitHub Pages, deployed by GitHub Actions
 
-```bash
-git clone <repository-url>
-cd Garden-Timer
-npm install
-```
+## How to Use
 
-### 2. Development Server
+1. Open the [landing page](https://spike271.github.io/Garden-Timer/) and press a call-to-action button to enter the app.
+2. Pick a focus length with a preset or the stepper.
+3. Press **Start**. The ring fills as the session runs.
+4. Stay until the ring completes. Your plant grows one stage.
+5. A break starts next. Start it, or skip it.
+6. After the 4th completed focus session, the break is a long one.
 
-Start the local Vite development server with Hot Module Replacement (HMR):
+> A running timer is not saved. Refreshing or closing the tab mid-session loses it, but it does not wilt the plant. Only an explicit forfeit does.
 
-```bash
-npm run dev
-```
+## Controls
 
-By default, Vite runs at `http://localhost:5173/`.
+| Control                  | What it does                                                             |
+| ------------------------ | ------------------------------------------------------------------------ |
+| **Start**                | Starts the current phase using the saved durations.                      |
+| **Forfeit Cycle (Wilt)** | During focus: abandons the session. The plant drops one stage and wilts. |
+| **Skip Break**           | During a break: ends it and returns to focus. No effect on the plant.    |
+| **25 / 45 / 50 presets** | Sets the next focus length.                                              |
+| **− / + stepper**        | Changes the focus length by 5 minutes, clamped to 1–180.                 |
+| **Intention field**      | A free-text note for the session. Kept in memory only.                   |
+| **Back link (header)**   | Returns to the landing page.                                             |
 
-- Open `http://localhost:5173/` to view `index.html`.
-- Open `http://localhost:5173/app` or `http://localhost:5173/app.html` to view the React application.
+## Game Mechanics
 
-### 3. Production Build
+### What happens to the plant
 
-Build static assets for production:
+| Event                                                              | Active plant                                                              |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| Focus session completes                                            | Grows one stage and clears any wilt.                                      |
+| Focus session completes while the plant is already a healthy bloom | A new seed is planted and becomes the active plant.                       |
+| Focus session completes on a wilted plant                          | Wilt clears and the plant grows one stage. A wilted bloom heals in place. |
+| Focus session forfeited                                            | Drops one stage (never below seed) and wilts.                             |
+| Break completes or is skipped                                      | No change.                                                                |
 
-```bash
-npm run build
-```
+Stages in order: **seed → sprout → sapling → bloom**.
 
-Production build artifacts will be output to the `dist/` directory.
+### Timer phases
 
-### 4. Preview Build
+| Phase       | Default length                                  | Editable in the UI |
+| ----------- | ----------------------------------------------- | ------------------ |
+| Focus       | 25 min                                          | Yes (1–180 min)    |
+| Short break | 5 min                                           | No                 |
+| Long break  | 15 min, after every 4th completed focus session | No                 |
 
-Preview the production build locally:
+Forfeited sessions do not count toward the long-break cycle.
 
-```bash
-npm run preview
-```
+### Sky by local time
 
----
+| Local time    | Sky                                 |
+| ------------- | ----------------------------------- |
+| 05:00 – 08:00 | Dawn: lilac to pink to cream        |
+| 08:00 – 17:00 | Day: pale blue to soft green        |
+| 17:00 – 20:00 | Golden hour: pink to orange to gold |
+| 20:00 – 05:00 | Night: navy sky, stars, darker soil |
 
-## Available Scripts
+The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon and setting on the right. The **moon** takes the same arc from 18:00 to 06:00.
 
-Defined in `package.json`:
+### What is saved
 
-| Script            | Command        | Description                                                        |
-| ----------------- | -------------- | ------------------------------------------------------------------ |
-| `npm run dev`     | `vite`         | Starts local development server with HMR.                          |
-| `npm run build`   | `vite build`   | Compiles and bundles production-ready assets for all entry points. |
-| `npm run preview` | `vite preview` | Serves the production build locally for verification.              |
+| `localStorage` key      | Contents                                                        |
+| ----------------------- | --------------------------------------------------------------- |
+| `garden-timer:garden`   | Every plant: stage and wilt state.                              |
+| `garden-timer:presets`  | Focus and break lengths.                                        |
+| `garden-timer:workDone` | Completed focus sessions.                                       |
+| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                      |
+| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load. |
 
----
+## Network and privacy
 
+There is no backend, analytics or account system. Two things do leave your browser:
+
+- **Weather.** The header reading uses the IP-based location from [GeoJS](https://get.geojs.io) to get approximate coordinates. If that fails, the browser asks for location permission instead. The coordinates are then sent to [Open-Meteo](https://open-meteo.com) for temperature, humidity and conditions. The result is cached locally.
+- **Third-party assets.** Tailwind (CDN script) and Google Fonts load from their own servers on page load.
+
+## Known limitations
+
+- The running timer is not persisted across reloads.
+- The footer stat labels are looser than their values. **Blooms Today** counts every healthy bloom in the garden, and **Sanctuary Streak** shows total completed sessions rather than consecutive days. **Focus Hours** is completed sessions multiplied by the current focus length.
+- The **Rain on Greenhouse Glass** badge is decorative. There is no audio.
+- Short and long break lengths are stored with the presets but have no editing UI yet.
+- Tailwind is loaded from its Play CDN, which is convenient but not intended for production use.
+
+## Prerequisites
+
+- **Node.js** `^20.19.0` or `>=22.12.0` (required by Vite 8)
+- **npm**, which ships with Node
+- A modern browser with Canvas 2D support
+
+## Building the Project
+
+### Run locally
+
+1. Clone and install:
+   ```bash
+   git clone https://github.com/Spike271/Garden-Timer.git
+   cd Garden-Timer
+   npm install
+   ```
+2. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+3. Open `http://localhost:5173/` for the landing page and `http://localhost:5173/app` for the app.
+
+> `/app` and `/garden-timer` are dev-server rewrites to `app.html`. On a static host, use `app.html` directly.
+
+### Production build
+
+1. Build and preview:
+   ```bash
+   npm run build
+   npm run preview
+   ```
+2. Output goes to `dist/`.
+
+### Deploy to GitHub Pages
+
+1. Push the repository to GitHub with `main` as the default branch.
+2. Go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
+3. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds the site and publishes it.
+4. Your site appears at `https://<username>.github.io/<repo-name>/`, and the app at `.../app.html`.
+
+> The workflow sets `BASE_PATH=/<repo-name>/` so assets resolve under the repository subpath. To test that build locally, run `BASE_PATH=/Garden-Timer/ npm run build`. Without `BASE_PATH`, the base is `/`.
+
+### Scripts
+
+| Script                 | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `npm run dev`          | Dev server with HMR.                      |
+| `npm run build`        | Production build of both pages.           |
+| `npm run preview`      | Serves the production build locally.      |
+| `npm run lint`         | Runs Oxlint.                              |
+| `npm run format`       | Formats the code with Oxfmt.              |
+| `npm run format:check` | Checks formatting without changing files. |
+
+## Acknowledgements
+
+- [React](https://react.dev) and [Vite](https://vite.dev)
+- [Open-Meteo](https://open-meteo.com) for weather data and [GeoJS](https://get.geojs.io) for IP geolocation
+- [Tailwind CSS](https://tailwindcss.com), and [Google Fonts](https://fonts.google.com) for Newsreader, Plus Jakarta Sans and Material Symbols
+- [Oxc](https://oxc.rs) for Oxlint and Oxfmt
