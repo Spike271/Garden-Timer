@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+	<title>Garden Timer : Mindful Pomodoro Sanctuary</title>
+	<link rel="icon" type="image/jpeg" href="/favicon.jpg"/>
+
+	<!-- Google Fonts: Newsreader & Plus Jakarta Sans -->
+	<link href="https://fonts.googleapis.com" rel="preconnect"/>
+	<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+	<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+
+	<!-- Material Symbols Outlined -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+
+	<!-- Tailwind CSS -->
+	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+	<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-dim": "#d4dcd3",
+                        "outline-variant": "#c2c9bb",
+                        "tertiary": "#903e5b",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "secondary-container": "#c1efb4",
+                        "secondary": "#406839",
+                        "primary-fixed": "#bcf0ae",
+                        "surface-container-highest": "#dce5db",
+                        "surface-variant": "#dce5db",
+                        "primary": "#376430",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "background": "#f3fcf2",
+                        "on-tertiary-container": "#fff6f7",
+                        "on-surface": "#161d18",
+                        "on-secondary-fixed": "#002201",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#3c6934",
+                        "on-secondary-container": "#466e3f",
+                        "surface-container-low": "#edf6ec",
+                        "on-secondary-fixed-variant": "#294f24",
+                        "on-background": "#161d18",
+                        "secondary-fixed-dim": "#a6d29a",
+                        "secondary-fixed": "#c1efb4",
+                        "inverse-on-surface": "#eaf3ea",
+                        "primary-fixed-dim": "#a1d494",
+                        "tertiary-fixed": "#ffd9e2",
+                        "surface-container": "#e8f0e7",
+                        "on-tertiary-fixed": "#3e001c",
+                        "on-primary-fixed": "#002201",
+                        "inverse-surface": "#2a322c",
+                        "on-tertiary-fixed-variant": "#782b48",
+                        "on-primary-fixed-variant": "#24501f",
+                        "on-primary-container": "#e8ffdd",
+                        "surface-container-high": "#e2ebe1",
+                        "primary-container": "#4f7d46",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed-dim": "#ffb1c7",
+                        "outline": "#72796e",
+                        "inverse-primary": "#a1d494",
+                        "tertiary-container": "#ad5673",
+                        "surface": "#f3fcf2",
+                        "on-surface-variant": "#42493e",
+                        "surface-bright": "#f3fcf2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "space-md": "1rem",
+                        "space-lg": "1.5rem",
+                        "margin-mobile": "1.25rem",
+                        "space-xs": "0.25rem",
+                        "space-sm": "0.5rem",
+                        "space-2xl": "4rem",
+                        "gutter-mobile": "1rem",
+                        "space-xl": "2.5rem",
+                        "gutter": "1.5rem",
+                        "margin": "2.5rem"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Newsreader", "serif"],
+                        "timer-display-mobile": ["Newsreader", "serif"],
+                        "display-hero": ["Newsreader", "serif"],
+                        "headline-md": ["Newsreader", "serif"],
+                        "body-lg": ["Plus Jakarta Sans", "sans-serif"],
+                        "label-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "headline-lg": ["Newsreader", "serif"],
+                        "headline-lg-mobile": ["Newsreader", "serif"],
+                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
+                        "timer-display": ["Newsreader", "serif"],
+                        "label-sm": ["Plus Jakarta Sans", "sans-serif"],
+                        "display-hero-mobile": ["Newsreader", "serif"],
+                        "body-sm": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "timer-display-mobile": ["60px", {"lineHeight": "68px", "letterSpacing": "-0.02em", "fontWeight": "300"}],
+                        "display-hero": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "headline-md": ["26px", {"lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.06em", "fontWeight": "600"}],
+                        "headline-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                        "body-md": ["15px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "timer-display": ["84px", {"lineHeight": "92px", "letterSpacing": "-0.03em", "fontWeight": "300"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "letterSpacing": "0.08em", "fontWeight": "600"}],
+                        "display-hero-mobile": ["38px", {"lineHeight": "46px", "letterSpacing": "-0.015em", "fontWeight": "400"}],
+                        "body-sm": ["13px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+	</script>
+
+	<style>
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined' !important;
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px;
+            line-height: 1;
+            letter-spacing: normal;
+            text-transform: none;
+            display: inline-block;
+            white-space: nowrap;
+            word-wrap: normal;
+            direction: ltr;
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+            vertical-align: middle;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            line-height: 1.15;
+        }
+
+        h2 {
+            font-size: 2.25rem;
+            line-height: 1.25;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            line-height: 1.35;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            line-height: 1.4;
+        }
+
+        body, p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .custom-paper-shadow {
+            box-shadow: 0 16px 36px -8px rgba(35, 43, 37, 0.07), 0 4px 12px -2px rgba(35, 43, 37, 0.03);
+        }
+
+        .subtle-card-rest {
+            box-shadow: 0 2px 10px -2px rgba(35, 43, 37, 0.04), 0 1px 3px rgba(35, 43, 37, 0.02);
+        }
+
+        #nav-active-indicator {
+            transition: left 0.35s cubic-bezier(0.25, 1, 0.5, 1), width 0.35s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.25s ease;
+            will-change: left, width;
+        }
+	</style>
+</head>
+<body class="bg-surface text-on-surface antialiased selection:bg-secondary-container selection:text-on-secondary-fixed">
+
+<!-- TOP APP BAR -->
+<header class="bg-surface/90 backdrop-blur-md docked full-width top-0 sticky z-50 border-b border-outline-variant/40">
+	<div class="max-w-[1200px] mx-auto px-6 h-20 flex items-center justify-between">
+
+		<!-- Brand Anchor -->
+		<a class="flex items-center gap-2.5 text-primary font-headline-sm text-headline-sm tracking-tight font-medium hover:opacity-90 transition-opacity" href="#">
+			<img src="/favicon.jpg" alt="Garden Timer Logo" class="w-8 h-8 rounded-lg object-cover shadow-xs border border-outline-variant/50"/>
+			<span>Garden Timer</span>
+		</a>
+
+		<!-- Desktop Nav with Animated Gliding Underline -->
+		<nav class="hidden md:flex items-center gap-8 relative py-2" id="desktop-nav">
+			<a class="nav-link text-primary font-label-md text-label-md transition-colors duration-200 relative py-1 font-semibold" href="#sanctuary" data-section="sanctuary">Sanctuary</a>
+			<a class="nav-link text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200 relative py-1 font-medium" href="#pillars" data-section="pillars">Pillars</a>
+			<a class="nav-link text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200 relative py-1 font-medium" href="#comparison" data-section="comparison">Comparison</a>
+			<a class="nav-link text-on-surface-variant font-label-md text-label-md hover:text-primary transition-colors duration-200 relative py-1 font-medium" href="#showcase" data-section="showcase">Showcase</a>
+			<!-- Animated Gliding Underline Indicator -->
+			<span id="nav-active-indicator" class="absolute bottom-0 h-[2.5px] bg-primary rounded-full pointer-events-none" style="opacity: 0;"></span>
+		</nav>
+
+		<!-- Trailing Cluster -->
+		<div class="flex items-center gap-3">
+			<a class="inline-flex items-center gap-2 bg-primary-container hover:bg-primary text-on-primary font-label-md text-label-md px-5 py-2.5 rounded-full transition-all duration-200 shadow-xs" href="app.html">
+				<span>Open Garden Timer</span>
+				<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+			</a>
+		</div>
+	</div>
+</header>
+
+<!-- MAIN CANVAS -->
+<main class="relative overflow-hidden">
+
+	<!-- HERO SECTION -->
+	<section class="max-w-[1200px] mx-auto px-6 pt-16 md:pt-24 pb-16 text-center relative z-10 scroll-mt-24" id="sanctuary">
+
+		<!-- Eyebrow Pill -->
+		<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container border border-outline-variant/60 text-secondary font-label-md text-label-md mb-8">
+			<span class="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+			<span>Mindful Botanical Pomodoro</span>
+		</div>
+
+		<!-- Main Headline -->
+		<h1 class="font-display-hero-mobile md:font-display-hero text-4xl md:text-6xl text-on-surface max-w-3xl mx-auto tracking-tight mb-6">
+			Focus deeply. Grow a flourishing garden.
+		</h1>
+
+		<!-- Subtitle -->
+		<p class="font-body-lg text-body-lg text-lg text-on-surface-variant max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+			Replace stressful ticking clocks with a living botanical companion. Every minute of focused work nurtures your plant from a tiny seed into a blooming tree.
+		</p>
+
+		<!-- CTAs -->
+		<div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+			<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md px-8 py-3.5 rounded-full transition-all duration-200 subtle-card-rest" href="app.html">
+				<span>Start Focusing</span>
+				<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+			</a>
+			<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-surface-container hover:bg-surface-container-high border border-outline-variant/60 text-on-surface font-label-md text-label-md px-6 py-3.5 rounded-full transition-all duration-200" href="#interactive-showcase" id="hero-timelapse-btn">
+				<span class="material-symbols-outlined text-[16px] text-primary" data-weight="fill" style="font-variation-settings: 'FILL' 1;">fast_forward</span>
+				<span>Explore Interactive Sample Preview</span>
+				<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-secondary-container text-on-secondary-fixed-variant text-[11px] font-semibold tracking-normal" id="hero-display-pill">
+            Watch Timelapse
+          </span>
+			</a>
+		</div>
+
+		<!-- Social Proof Metric -->
+		<div class="inline-flex items-center gap-2 text-on-surface-variant/80 font-body-sm text-body-sm">
+			<span class="material-symbols-outlined text-[16px] text-primary">psychology</span>
+			<span>Over 850 thousand mindful hours cultivated without digital anxiety.</span>
+		</div>
+	</section>
+
+	<!-- SAMPLE PREVIEW & INTERACTIVE GARDEN SIMULATOR -->
+	<section class="max-w-[1100px] mx-auto px-4 sm:px-6 pb-24" id="interactive-showcase">
+		<div class="text-center max-w-2xl mx-auto mb-8">
+			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container border border-outline-variant/60 text-secondary font-label-md text-label-md mb-3">
+				<span class="w-2 h-2 rounded-full bg-primary inline-block"></span>
+				<span>Sample Preview &amp; Simulator</span>
+			</div>
+			<h2 class="font-headline-lg-mobile md:font-headline-lg text-2xl md:text-4xl text-on-surface mt-1 mb-2">
+				Sample Preview: Experience the Living Garden
+			</h2>
+			<p class="font-body-md text-body-md text-base text-on-surface-variant">
+				See how deliberate focus nurtures your garden over time. Watch the continuous biological growth timelapse, scrub through daily circadian lighting, and test session pacing.
+			</p>
+		</div>
+		<div class="pressed-paper-card border border-outline-variant/60 rounded-2xl overflow-hidden shadow-md">
+
+			<!-- WINDOW TITLEBAR -->
+			<div class="bg-surface-container px-4 sm:px-6 py-3.5 border-b border-outline-variant/50 flex flex-wrap items-center justify-between gap-4 text-xs">
+				<!-- Left: Window Controls & Circadian Clock -->
+				<div class="flex items-center gap-4">
+					<div class="flex items-center gap-1.5 opacity-60">
+						<span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
+						<span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
+						<span class="w-2.5 h-2.5 rounded-full bg-outline-variant"></span>
+					</div>
+					<div class="h-3.5 w-px bg-outline-variant/50"></div>
+					<div class="flex items-center gap-1.5 text-on-surface-variant font-medium" id="showcase-circadian-text">
+<span id="showcase-circadian-icon">
+<svg class="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="5"></circle>
+  <line x1="12" y1="1" x2="12" y2="3"></line>
+  <line x1="12" y1="21" x2="12" y2="23"></line>
+  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+  <line x1="1" y1="12" x2="3" y2="12"></line>
+  <line x1="21" y1="12" x2="23" y2="12"></line>
+  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+</svg>
+</span>
+						<span id="showcase-clock">02:15 PM · Daylight Studio</span>
+					</div>
+				</div>
+
+				<!-- Right: Soundscape & Mode Badge -->
+				<div class="flex items-center gap-2.5">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-outline-variant/40 text-on-surface-variant text-[11px] font-medium hidden sm:inline-flex">
+<svg class="w-3 h-3 text-secondary" viewBox="0 0 24 24" fill="currentColor">
+  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+</svg>
+<span>Rain on Greenhouse Glass</span>
+</span>
+					<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed-variant text-[11px] font-semibold" id="showcase-session-pill">
+<span class="w-1.5 h-1.5 rounded-full bg-primary" id="showcase-session-dot"></span>
+<span id="showcase-session-text">Sample Simulator</span>
+</span>
+				</div>
+			</div>
+
+			<!-- FULL-WIDTH BOTANICAL PROGRESSION & TIMELAPSE RIBBON -->
+			<div class="bg-surface border-b border-outline-variant/40 px-4 sm:px-6 py-3 overflow-x-auto">
+				<div class="flex items-center justify-between min-w-[620px] gap-3 text-xs">
+
+					<!-- Stage Quick Selectors -->
+					<div class="flex items-center gap-2" id="showcase-stage-list">
+						<span class="text-on-surface-variant/80 font-medium">Growth Stages:</span>
+						<button type="button" class="stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-secondary-container text-on-secondary-fixed-variant transition-all cursor-pointer" data-stage="0">
+							<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+							<span>1. Seed Rest</span>
+						</button>
+						<button type="button" class="stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer" data-stage="1">
+							<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+							<span>2. Sprout</span>
+						</button>
+						<button type="button" class="stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer" data-stage="2">
+							<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+							<span>3. Sapling</span>
+						</button>
+						<button type="button" class="stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer" data-stage="3">
+							<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+							<span>4. Bloom</span>
+						</button>
+						<button type="button" class="stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer" id="stage-garden-btn" data-stage="4">
+							<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+							<span>Full Garden</span>
+						</button>
+					</div>
+
+					<!-- Actions: Wilt Demonstration & Primary Timelapse Button -->
+					<div class="flex items-center gap-2 shrink-0">
+						<button type="button" id="toggle-wilt-preview-btn" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] text-tertiary bg-tertiary-fixed/30 hover:bg-tertiary-fixed/50 border border-tertiary-fixed/60 font-medium transition-colors cursor-pointer" title="Simulate what happens when leaving early">
+							<span class="material-symbols-outlined text-[13px]">energy_savings_leaf</span>
+							<span id="wilt-btn-text">Test Wilt</span>
+						</button>
+						<button type="button" id="primary-timelapse-btn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary hover:bg-surface-tint text-on-primary shadow-xs transition-all cursor-pointer active:scale-95">
+							<span class="material-symbols-outlined text-[15px]" id="timelapse-btn-icon">fast_forward</span>
+							<span id="timelapse-btn-text">Play Growth Timelapse</span>
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- INTERACTIVE TIMELAPSE SCRUBBER BAR -->
+			<div class="bg-surface-container-low/60 border-b border-outline-variant/40 px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+				<div class="flex items-center gap-2">
+					<span class="material-symbols-outlined text-primary text-[16px]">schedule</span>
+					<span class="font-medium text-on-surface text-[11px]" id="timelapse-phase-text">Timeline: 06:00 AM · Seed Resting</span>
+				</div>
+				<div class="flex-1 min-w-[200px] max-w-sm flex items-center gap-2">
+					<span class="text-[10px] text-on-surface-variant shrink-0">Dawn</span>
+					<input type="range" id="timelapse-scrubber" min="0" max="100" value="0" step="0.5" class="w-full accent-primary cursor-pointer h-1.5 bg-surface-container-highest rounded-lg appearance-none" aria-label="Timelapse Progress Scrubber" />
+					<span class="text-[10px] text-on-surface-variant shrink-0">Night</span>
+					<span class="text-[11px] font-mono font-semibold text-primary shrink-0 w-8 text-right" id="timelapse-percent">0%</span>
+				</div>
+				<div class="flex items-center gap-1.5">
+					<span class="text-[10px] text-on-surface-variant font-medium">Speed:</span>
+					<button type="button" class="timelapse-speed-btn px-2 py-0.5 rounded text-[10px] font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-speed="5">5x</button>
+					<button type="button" class="timelapse-speed-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-secondary-container text-on-secondary-fixed-variant transition-colors cursor-pointer" data-speed="15">15x</button>
+					<button type="button" class="timelapse-speed-btn px-2 py-0.5 rounded text-[10px] font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer" data-speed="35">35x</button>
+				</div>
+			</div>
+
+			<!-- DUAL PANE WORKSPACE GRID -->
+			<div class="grid grid-cols-1 lg:grid-cols-12 min-h-[480px]">
+				<!-- LEFT PANE: FOCUS CADENCE CONSOLE (5 COLS) -->
+				<section class="lg:col-span-5 p-6 sm:p-7 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-outline-variant/40 bg-surface">
+					<div>
+						<!-- Header -->
+						<div class="flex items-center justify-between mb-4">
+							<div class="flex items-center gap-2">
+								<span class="material-symbols-outlined text-primary text-[18px]">schedule</span>
+								<span class="text-xs font-semibold text-on-surface tracking-wider uppercase">Focus Cadence</span>
+							</div>
+							<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary bg-surface-container px-2.5 py-0.5 rounded-full border border-outline-variant/30">
+Session 1 of 4
+</span>
+						</div>
+						<!-- Quick Cadence Presets & Duration Stepper -->
+						<div class="flex items-center gap-2 mb-6" id="timer-presets">
+							<button type="button" class="flex-1 py-1.5 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-primary bg-secondary-container text-on-secondary-fixed-variant font-semibold shadow-xs" data-time="25">
+								25 min
+							</button>
+							<button type="button" class="flex-1 py-1.5 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-outline-variant/60 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium" data-time="45">
+								45 min
+							</button>
+							<button type="button" class="flex-1 py-1.5 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-outline-variant/60 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium" data-time="50">
+								50 min
+							</button>
+							<!-- Stepper controls -->
+							<div class="flex items-center justify-between px-2 py-0.5 rounded-full border border-outline-variant/60 bg-surface-container-low">
+								<button type="button" id="stepper-dec" aria-label="Decrease focus minutes" class="text-on-surface-variant hover:text-primary transition-colors p-1 bg-transparent border-0 cursor-pointer flex items-center justify-center rounded">
+									<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+										<line x1="5" y1="12" x2="19" y2="12"></line>
+									</svg>
+								</button>
+								<span class="text-[11px] font-semibold text-on-surface tabular-nums px-1" id="stepper-val">
+25m
+</span>
+								<button type="button" id="stepper-inc" aria-label="Increase focus minutes" class="text-on-surface-variant hover:text-primary transition-colors p-1 bg-transparent border-0 cursor-pointer flex items-center justify-center rounded">
+									<svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+										<line x1="12" y1="5" x2="12" y2="19"></line>
+										<line x1="5" y1="12" x2="19" y2="12"></line>
+									</svg>
+								</button>
+							</div>
+						</div>
+						<!-- Circular Radial Dial -->
+						<div class="relative w-56 h-56 sm:w-64 sm:h-64 mx-auto my-3 flex items-center justify-center">
+							<svg class="w-full h-full transform -rotate-90" viewBox="0 0 260 260" aria-hidden="true">
+								<circle cx="130" cy="130" r="110" fill="transparent" stroke="#dce5db" stroke-width="8"></circle>
+								<circle class="dial-circle-progress" cx="130" cy="130" r="110" fill="transparent" stroke="#376430" stroke-width="8" stroke-dasharray="691.15" stroke-dashoffset="172.78" stroke-linecap="round" id="timer-stroke"></circle>
+							</svg>
+							<div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+<span class="text-[11px] tracking-[0.2em] uppercase text-secondary font-semibold mb-0.5">
+Deep Focus
+</span>
+								<div class="font-serif text-5xl sm:text-6xl text-on-surface font-light tracking-tight leading-none my-1 font-variant-numeric tabular-nums" id="timer-display-val">
+									25:00
+								</div>
+								<span class="text-xs text-on-surface-variant font-medium mt-1" id="timer-stage-desc">
+Nurturing Seed Rest
+</span>
+							</div>
+						</div>
+					</div>
+					<!-- Action Controls & Intention -->
+					<div class="pt-4 space-y-3">
+						<div class="flex items-center gap-2.5">
+							<button type="button" id="toggle-timer-btn" class="flex-1 bg-primary hover:bg-surface-tint text-on-primary font-semibold text-xs py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-xs cursor-pointer active:scale-[0.99]">
+								<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+									<polygon points="6 3 20 12 6 21 6 3"></polygon>
+								</svg>
+								<span id="timer-btn-text">Start Deep Focus</span>
+							</button>
+							<button type="button" id="reset-timer-btn" aria-label="Reset Session" class="px-3.5 py-3 border border-outline-variant/80 hover:bg-surface-container rounded-lg text-on-surface transition-colors cursor-pointer" title="Reset Session">
+								<span class="material-symbols-outlined text-[18px]">refresh</span>
+							</button>
+						</div>
+						<!-- Mindful Intention Text Prompt Box -->
+						<div class="bg-surface-container-low border border-outline-variant/40 rounded-lg p-2.5">
+							<div class="flex items-center gap-1.5 mb-1 text-on-surface-variant">
+								<span class="material-symbols-outlined text-[14px] text-primary">edit_note</span>
+								<label for="showcase-intention" class="text-[10px] font-semibold uppercase tracking-wider text-on-surface-variant">
+									Mindful Intention
+								</label>
+							</div>
+							<input id="showcase-intention" type="text" value="Nurture deep concentration and thoughtful craft" placeholder="What deliberate act will nourish this growth?" class="w-full bg-transparent border-0 border-b border-outline-variant/40 focus:border-primary focus:ring-0 text-on-surface text-xs px-0 py-0.5 placeholder:text-outline-variant outline-none"/>
+						</div>
+					</div>
+				</section>
+				<!-- RIGHT PANE: BOTANICAL TERRARIUM & NURSERY CANVAS (7 COLS) -->
+				<section class="lg:col-span-7 bg-surface-container-low p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden">
+					<!-- Specimen Header & Telemetry -->
+					<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-outline-variant/30">
+						<div>
+							<div class="flex items-center gap-2">
+<span class="text-[10px] font-semibold text-primary tracking-widest uppercase">
+Specimen No. 042
+</span>
+								<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+								<span class="text-[10px] font-medium text-on-surface-variant">
+Active Soil Nursery: Linen Plot 04
+</span>
+							</div>
+							<h3 class="font-serif text-xl sm:text-2xl text-on-surface mt-0.5 mb-0 font-normal">
+								Acer Palmatum (Japanese Maple)
+							</h3>
+						</div>
+						<div class="flex items-center gap-3 bg-surface px-3 py-1.5 rounded-lg border border-outline-variant/40 self-start sm:self-auto text-xs">
+							<div class="flex items-center gap-1.5">
+								<svg class="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="currentColor">
+									<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+								</svg>
+								<span class="font-semibold text-on-surface" id="showcase-moisture-val">94%</span>
+							</div>
+							<span class="w-px h-3.5 bg-outline-variant/60"></span>
+							<div class="flex items-center gap-1.5" id="showcase-sun-telemetry">
+<span id="showcase-sun-icon">
+<svg class="w-3.5 h-3.5 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+  <circle cx="12" cy="12" r="5"></circle>
+  <line x1="12" y1="1" x2="12" y2="3"></line>
+  <line x1="12" y1="21" x2="12" y2="23"></line>
+  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+  <line x1="1" y1="12" x2="3" y2="12"></line>
+  <line x1="21" y1="12" x2="23" y2="12"></line>
+  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+</svg>
+</span>
+								<span class="font-semibold text-on-surface" id="showcase-sun-label">Filtered Sun</span>
+							</div>
+						</div>
+					</div>
+					<!-- Central Procedural Living Canvas -->
+					<div class="relative w-full rounded-xl overflow-hidden border border-outline-variant/50 shadow-inner my-4 select-none">
+
+						<!-- Canvas Quick Timelapse Button -->
+						<button id="canvas-timelapse-btn" type="button" class="absolute top-3 right-3 z-10 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 hover:bg-surface backdrop-blur-xs border border-outline-variant/60 shadow-xs flex items-center gap-1 text-[11px] font-semibold text-primary cursor-pointer transition-all">
+							<span class="material-symbols-outlined text-[14px]">fast_forward</span>
+							<span id="canvas-timelapse-label">Timelapse</span>
+						</button>
+
+						<!-- Living Procedural Botanical Canvas -->
+						<canvas id="showcase-canvas" class="w-full h-[280px] sm:h-[320px] block" aria-label="Showcase Garden Canvas"></canvas>
+
+					</div>
+					<!-- Growth Telemetry Stats Footer Grid -->
+					<div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-outline-variant/30 text-center">
+						<div class="p-2.5 rounded-lg bg-surface border border-outline-variant/30">
+<span class="text-[10px] font-semibold text-on-surface-variant block uppercase tracking-wider">
+Stage
+</span>
+							<span class="font-serif text-base sm:text-lg text-primary font-medium" id="showcase-stat-stage">
+Seed Rest
+</span>
+						</div>
+						<div class="p-2.5 rounded-lg bg-surface border border-outline-variant/30">
+<span class="text-[10px] font-semibold text-on-surface-variant block uppercase tracking-wider">
+Blooms Today
+</span>
+							<span class="font-serif text-base sm:text-lg text-on-surface font-medium" id="showcase-stat-blooms">
+0
+</span>
+						</div>
+						<div class="p-2.5 rounded-lg bg-surface border border-outline-variant/30">
+<span class="text-[10px] font-semibold text-on-surface-variant block uppercase tracking-wider">
+Focus Hours
+</span>
+							<span class="font-serif text-base sm:text-lg text-on-surface font-medium" id="showcase-stat-hours">
+1.8 <span class="text-[11px] font-sans text-on-surface-variant font-normal">hrs</span>
+</span>
+						</div>
+						<div class="p-2.5 rounded-lg bg-surface border border-outline-variant/30">
+<span class="text-[10px] font-semibold text-on-surface-variant block uppercase tracking-wider">
+Sanctuary Streak
+</span>
+							<span class="font-serif text-base sm:text-lg text-secondary font-medium" id="showcase-stat-streak">
+0 <span class="text-[11px] font-sans text-on-surface-variant font-normal">Days</span>
+</span>
+						</div>
+					</div>
+				</section>
+			</div>
+		</div>
+	</section>
+	<!-- SECTION: HOW GARDEN TIMER ANCHORS FOCUS (3 PILLARS) -->
+	<section class="max-w-[1200px] mx-auto px-6 py-20 border-t border-outline-variant/40 scroll-mt-24" id="pillars">
+		<div class="text-center max-w-2xl mx-auto mb-16">
+			<span class="font-label-md text-label-md text-primary tracking-widest uppercase">The Botanical Philosophy</span>
+			<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mt-2 mb-4">
+				How Garden Timer Anchors Deliberate Work
+			</h2>
+			<p class="font-body-md text-body-md text-on-surface-variant">
+				Conventional productivity tools feed on hyper-vigilance. We designed an organic environment that allows nervous systems to settle into effortless clarity.
+			</p>
+		</div>
+		<!-- Bento-style 3 Pillars Grid -->
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+			<!-- Pillar Card 1 -->
+			<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-8 subtle-card-rest hover:border-primary/50 transition-all duration-300 flex flex-col justify-between">
+				<div>
+					<div class="text-primary mb-6 flex items-center">
+						<span class="material-symbols-outlined text-[32px]">yard</span>
+					</div>
+					<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Organic Visual Progress</h3>
+					<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+						Peripheral biological growth replaces stressful countdown numbers. You stay immersed in writing, thinking, or coding without clock-watching or countdown adrenaline.
+					</p>
+				</div>
+				<div class="mt-8 pt-4 border-t border-outline-variant/40 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+					<span class="material-symbols-outlined text-[16px] text-secondary">check_circle</span>
+					<span>Gentle peripheral awareness</span>
+				</div>
+			</div>
+			<!-- Pillar Card 2 -->
+			<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-8 subtle-card-rest hover:border-primary/50 transition-all duration-300 flex flex-col justify-between">
+				<div>
+					<div class="text-tertiary mb-6 flex items-center">
+						<span class="material-symbols-outlined text-[32px]">energy_savings_leaf</span>
+					</div>
+					<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Gentle Consequence</h3>
+					<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+						Leaving or skipping early wilts the active plant, fostering mindful pause and calm commitment before impulsively opening attention-fragmenting tabs.
+					</p>
+				</div>
+				<div class="mt-8 pt-4 border-t border-outline-variant/40 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+					<span class="material-symbols-outlined text-[16px] text-tertiary">pause_circle</span>
+					<span>Fosters mindful pause</span>
+				</div>
+			</div>
+			<!-- Pillar Card 3 -->
+			<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-8 subtle-card-rest hover:border-primary/50 transition-all duration-300 flex flex-col justify-between">
+				<div>
+					<div class="text-primary mb-6 flex items-center">
+						<span class="material-symbols-outlined text-[32px]">routine</span>
+					</div>
+					<h3 class="font-headline-md text-headline-md text-on-surface mb-3">Natural Day &amp; Night Rhythm</h3>
+					<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+						Procedural sky arc follows your real local clock with warm golden dawn, midday studio clarity, and twilight dusk stars to respect your circadian pacing.
+					</p>
+				</div>
+				<div class="mt-8 pt-4 border-t border-outline-variant/40 flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+					<span class="material-symbols-outlined text-[16px] text-secondary">wb_twilight</span>
+					<span>Circadian-aligned sanctuary</span>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- SECTION: PARADIGMATIC COMPARISON -->
+	<section class="max-w-[1200px] mx-auto px-6 py-20 border-t border-outline-variant/40 scroll-mt-24" id="comparison">
+		<div class="text-center max-w-xl mx-auto mb-14">
+			<span class="font-label-md text-label-md text-primary tracking-widest uppercase">The Contrast</span>
+			<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mt-2 mb-3">
+				Red Clocks vs. Living Sanctuaries
+			</h2>
+			<p class="font-body-md text-body-md text-on-surface-variant">
+				Deep work requires psychological safety, not industrial factory alarm chimes.
+			</p>
+		</div>
+		<div class="max-w-[920px] mx-auto border border-outline-variant/60 rounded-xl overflow-hidden custom-paper-shadow">
+			<div class="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-outline-variant/50">
+				<!-- Column 1: Conventional Red Countdown -->
+				<div class="p-8 md:p-10">
+					<div class="flex items-center gap-2 mb-6 text-error">
+						<span class="material-symbols-outlined text-[22px]">alarm</span>
+						<span class="font-label-md text-label-md uppercase tracking-wider font-semibold">Standard Pomodoro Clocks</span>
+					</div>
+					<ul class="space-y-6 text-on-surface-variant font-body-md text-body-md">
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">close</span>
+							<span><strong>Flashing red seconds:</strong> Provokes continuous peripheral micro-stress and anxiety about impending deadlines.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">close</span>
+							<span><strong>Loud piercing buzzers:</strong> Jarring audio alarms that violently shatter creative absorption and flow states.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">close</span>
+							<span><strong>Gamified haste:</strong> Encourages rushing through tasks just to check boxes and score digital point badges.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-error text-[18px] shrink-0 mt-0.5">close</span>
+							<span><strong>Cold synthetic UI:</strong> Garish high-contrast neon interfaces that strain tired eyes during extended research.</span>
+						</li>
+					</ul>
+				</div>
+				<!-- Column 2: Deliberate Botanical Cultivation -->
+				<div class="p-8 md:p-10">
+					<div class="flex items-center gap-2 mb-6 text-primary">
+						<span class="material-symbols-outlined text-[22px]" data-weight="fill" style="font-variation-settings: 'FILL' 1;">spa</span>
+						<span class="font-label-md text-label-md uppercase tracking-wider font-semibold">Garden Timer Sanctuary</span>
+					</div>
+					<ul class="space-y-6 text-on-surface font-body-md text-body-md">
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">check</span>
+							<span><strong>Organic biological growth:</strong> Calm botanical evolution that provides reassurance without time pressure.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">check</span>
+							<span><strong>Gentle Tibetan bells &amp; rain:</strong> Harmonic soundscapes that signal completed cycles with peaceful grace.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">check</span>
+							<span><strong>Care for living specimens:</strong> Natural accountability rooted in devotion to a seedling rather than guilt.</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<span class="material-symbols-outlined text-primary text-[18px] shrink-0 mt-0.5">check</span>
+							<span><strong>Tactile botanical linen:</strong> Warm editorial paper tones that rest the mind like a leather-bound book.</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- SECTION: HERBARIUM SHOWCASE -->
+	<section class="max-w-[1200px] mx-auto px-6 py-20 border-t border-outline-variant/40 scroll-mt-24" id="showcase">
+		<div class="flex flex-col md:flex-row items-baseline justify-between mb-12">
+			<div>
+				<span class="font-label-md text-label-md text-primary tracking-widest uppercase">Herbarium Archives</span>
+				<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mt-1">
+					Specimens Harvested by Mindful Practitioners
+				</h2>
+			</div>
+			<p class="font-body-sm text-body-sm text-on-surface-variant max-w-sm mt-3 md:mt-0">
+				Every completed session archives an authentic botanical illustration into your personal research herbarium.
+			</p>
+		</div>
+		<!-- 3 Botanical Specimens Cards -->
+		<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+			<!-- Specimen 1 -->
+			<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-6 subtle-card-rest flex flex-col justify-between">
+				<div class="aspect-[4/3] rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+					<img class="w-full h-full object-cover" data-alt="A delicate botanical herbarium illustration of a golden Ginkgo Biloba leaf pressed against warm cream linen paper with fine organic veins and handwritten taxonomy notes. Soft morning natural light illuminates the tranquil editorial composition with a peaceful olive and sage color palette."
+					     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBtU85olxW8nx-sFyUwg2jgMQNDygKVuHPTMPPFRwx3bkVQjm3Eb0kaQc9eZ6oOe_rCR2AqaUCWbsdZMu8_BbCgponU1NIMyjmw0TpeI7-o5AUMfzUfmy9SGqMEiIF3VlSna8EGuFfHPw7svR6kXBjhZEHe65M0uIXr27ihYJ8NTqM06wNSfFi4QSdkoCHU7i2Arm8vK1KTJwfHTjBHVe78PwGTLB1k10_9eYiKXAuUr87dl2JzYu_Xv52LcNDkSzXwlqatr3yOr-_I" alt=""/>
+					<span class="absolute top-3 left-3 bg-surface/90 backdrop-blur-sm px-2.5 py-1 rounded text-primary font-label-sm text-label-sm border border-outline-variant/40">
+              Specimen 104
+            </span>
+				</div>
+				<div>
+					<div class="flex items-center justify-between mb-1">
+						<h3 class="font-headline-sm text-headline-sm text-on-surface">Ginkgo Biloba</h3>
+						<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded">4 × 25 min</span>
+					</div>
+					<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+						Cultivated during academic archival research and thesis chapter outlining.
+					</p>
+					<div class="pt-3 border-t border-outline-variant/40 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+						<span>Practitioner: Research Scholar</span>
+						<span class="text-primary font-semibold">100 min deep work</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Specimen 2 -->
+			<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-6 subtle-card-rest flex flex-col justify-between">
+				<div class="aspect-[4/3] rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+					<img class="w-full h-full object-cover" data-alt="An elegant botanical engraving of a Scotch Pine branch with delicate pine needles and miniature cones arranged on textured unbleached vintage paper. Studio lighting with warm forest shadows and refined editorial green accents evoke deep contemplative stillness."
+					     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAanAP644oyLdSj2w88QqAbnN8aMWlduulBmztDt8ceu6aIJRR8ho0jJflK43EHD7V1cqW-I_hctaedNCdFRjxRmoJ5VHSPxcQL3ddMSklJwDQdhEvl8y8MrxoZWEu9nEydU9eyhBDgnzfY0Vte5xLaaZA0fZjniOzyeGYr3p8MtSVrZuNRV_tgb2Sj4Bj1F7eMP2m-NzNEGuTz3GTHm4pwEndqyk0LfiTUFI6YgiZIDiRUtxVxLhpzxW4dsgi17gm9dRrJan_8px1F" alt=""/>
+					<span class="absolute top-3 left-3 bg-surface/90 backdrop-blur-sm px-2.5 py-1 rounded text-primary font-label-sm text-label-sm border border-outline-variant/40">
+              Specimen 089
+            </span>
+				</div>
+				<div>
+					<div class="flex items-center justify-between mb-1">
+						<h3 class="font-headline-sm text-headline-sm text-on-surface">Scotch Pine</h3>
+						<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-2 py-0.5 rounded">6 × 25 min</span>
+					</div>
+					<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+						Cultivated during systems architecture and compiler core refactoring.
+					</p>
+					<div class="pt-3 border-t border-outline-variant/40 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+						<span>Practitioner: Systems Architect</span>
+						<span class="text-primary font-semibold">150 min deep work</span>
+					</div>
+				</div>
+			</div>
+			<!-- Specimen 3 -->
+			<div class="bg-surface-container-low border border-outline-variant/60 rounded-xl p-6 subtle-card-rest flex flex-col justify-between">
+				<div class="aspect-[4/3] rounded-lg mb-6 flex items-center justify-center relative overflow-hidden">
+					<img class="w-full h-full object-cover" data-alt="A refined botanical illustration of soft pink Cherry Blossom petals and slender twigs pressed onto handmade Japanese washi paper. The image captures gentle morning daylight, exquisite natural botanical symmetry, and a serene palette of soft blush rose, muted lichen green, and warm cream."
+					     src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi7wyusWxNxwcvGfrfXm1H1bXbRtrNBsf8hJSo9eDqIiHpuyhiYkr_FUK-bLvN9gpT8McOPIMjJY4FUNTDYMPNapVa9i1Mabc8YuFEDN_6IMc6DoasJ84_4deFA31YgHiUXFpIGrM_SHaTaW-U5ZoVTk2LcpcnTN6Nr47kkpThOcLSEKqkfKgQcsSZFrA9BOL5k6VXLughDF1Uiv1ACeTEtxy1OaIazuKyR9FOyil9Su4PqK2Qmop_En4lNo3EvO7x_ZndH0i-0G5S" alt=""/>
+					<span class="absolute top-3 left-3 bg-surface/90 backdrop-blur-sm px-2.5 py-1 rounded text-tertiary font-label-sm text-label-sm border border-outline-variant/40">
+              Specimen 142
+            </span>
+				</div>
+				<div>
+					<div class="flex items-center justify-between mb-1">
+						<h3 class="font-headline-sm text-headline-sm text-on-surface">Cherry Blossom</h3>
+						<span class="font-label-sm text-label-sm text-tertiary bg-tertiary-fixed/40 px-2 py-0.5 rounded">5 × 25 min</span>
+					</div>
+					<p class="font-body-sm text-body-sm text-on-surface-variant mb-4">
+						Cultivated during literary novel manuscript drafting and poetry composition.
+					</p>
+					<div class="pt-3 border-t border-outline-variant/40 flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+						<span>Practitioner: Essayist &amp; Poet</span>
+						<span class="text-primary font-semibold">125 min deep work</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!-- FINAL CALL TO ACTION BANNER -->
+	<section class="max-w-[1200px] mx-auto px-6 py-20">
+		<div class="bg-surface-container border border-outline-variant/70 rounded-2xl p-10 md:p-16 text-center max-w-4xl mx-auto custom-paper-shadow relative overflow-hidden">
+			<!-- Botanical Backdrop Leaves Decoration -->
+			<div class="absolute -bottom-10 -left-10 text-primary-fixed/40 pointer-events-none select-none">
+				<span class="material-symbols-outlined text-[160px]">spa</span>
+			</div>
+			<div class="absolute -top-12 -right-8 text-secondary-fixed/40 pointer-events-none select-none">
+				<span class="material-symbols-outlined text-[140px]">potted_plant</span>
+			</div>
+			<div class="relative z-10 max-w-xl mx-auto">
+				<span class="font-label-md text-label-md text-primary tracking-widest uppercase">Begin Your Sanctuary</span>
+				<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mt-3 mb-4">
+					Plant your first seed today. Mindful focus is only a breath away.
+				</h2>
+				<p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">
+					Available on Web, macOS, and iPad. Zero advertisements, zero notifications, purely quiet space to bring your greatest work into full bloom.
+				</p>
+				<div class="flex items-center justify-center">
+					<a class="inline-flex items-center justify-center gap-2 bg-primary hover:bg-surface-tint text-on-primary font-label-md text-label-md px-8 py-4 rounded-full transition-all duration-200 shadow-md" href="app.html">
+						<span class="material-symbols-outlined text-[18px]">local_florist</span>
+						<span>Open Garden Timer</span>
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</main>
+<!-- FOOTER -->
+<footer class="bg-surface-container-low border-t border-outline-variant/40">
+	<div class="max-w-[1200px] mx-auto px-6 py-6 sm:py-7 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+		<!-- Left: Logo & Brand -->
+		<a class="flex items-center gap-2 text-primary font-headline-sm text-base hover:opacity-90 transition-opacity" href="#">
+			<img src="/favicon.jpg" alt="Garden Timer Logo" class="w-6 h-6 rounded-md object-cover shadow-xs border border-outline-variant/50"/>
+			<span class="font-medium tracking-tight">Garden Timer</span>
+		</a>
+		<!-- Right: Copyright -->
+		<p class="text-on-surface-variant font-body-sm text-xs sm:text-sm">
+			© 2026 Garden Timer. Cultivating mindful sessions and deliberate pacing.
+		</p>
+	</div>
+</footer>
+<!-- Interactive Botanical Sample Preview & Garden Timelapse Engine -->
+<script type="module" src="/src/landing.js"></script>
+</body>
+</html>
+
