@@ -56,14 +56,13 @@ export const LANDING_CONFIG = Object.freeze({
     formatNurturing: (stageName) => `Nurturing ${stageName}`,
   }),
 
-
   SUN_LABELS: Object.freeze({
     GOLDEN_SUN: 'Golden Sun',
     FILTERED_SUN: 'Filtered Sun',
     MOONLIGHT_REST: 'Moonlight Rest',
   }),
 
-  // Real readouts for the demo plant. The demo has 4 growth stages (the 5th "Full Garden" view is 3 plants).
+  // Real readouts for the demo plant. The demo has 4 growth stages.
   GROWTH_READOUT: Object.freeze({
     TOTAL_STAGES: 4,
     WILTED: 'Wilted',

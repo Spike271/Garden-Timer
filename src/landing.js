@@ -1,5 +1,9 @@
 import { LANDING_CONFIG } from './config';
-import { drawSky as drawSharedSky, drawGround as drawSharedGround, isNightSky } from './canvas/drawPlant';
+import {
+  drawSky as drawSharedSky,
+  drawGround as drawSharedGround,
+  isNightSky,
+} from './canvas/drawPlant';
 
 const {
   STAGE_NAMES,
@@ -115,7 +119,11 @@ function initLandingShowcase() {
   function syncUI() {
     let simHour = new Date().getHours();
     let isDay = simHour >= 6 && simHour < 18;
-    let timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    let timeStr = new Date().toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
     let studioStr = isDay ? CIRCADIAN_STUDIOS.DAYLIGHT_STUDIO : CIRCADIAN_STUDIOS.EVENING_STUDIO;
 
     if (isTimelapseRunning || timelapseProgress > 0) {
@@ -142,11 +150,15 @@ function initLandingShowcase() {
     if (growthVal) {
       growthVal.textContent = isWilted
         ? GROWTH_READOUT.WILTED
-        : GROWTH_READOUT.format(Math.min(currentStage, GROWTH_READOUT.TOTAL_STAGES - 1), GROWTH_READOUT.TOTAL_STAGES);
+        : GROWTH_READOUT.format(
+            Math.min(currentStage, GROWTH_READOUT.TOTAL_STAGES - 1),
+            GROWTH_READOUT.TOTAL_STAGES,
+          );
     }
     if (specimenNo) specimenNo.textContent = SPECIMEN_LABELS.formatNumber(plantCount);
     if (gardenLine) gardenLine.textContent = SPECIMEN_LABELS.formatGarden(plantCount);
-    if (taxonomicDot) taxonomicDot.className = `w-1.5 h-1.5 rounded-full ${isWilted ? 'bg-error' : 'bg-primary'}`;
+    if (taxonomicDot)
+      taxonomicDot.className = `w-1.5 h-1.5 rounded-full ${isWilted ? 'bg-error' : 'bg-primary'}`;
     if (taxonomicBadge) {
       taxonomicBadge.textContent = isWilted
         ? TAXONOMIC_BEDS.WILTED
@@ -209,7 +221,8 @@ function initLandingShowcase() {
         if (dot) dot.className = `w-1.5 h-1.5 rounded-full ${isWilted ? 'bg-error' : 'bg-primary'}`;
         if (label) label.textContent = TELEMETRY.formatStageBadge(i, STAGE_NAMES[i], true);
       } else {
-        btn.className = 'stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer';
+        btn.className =
+          'stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer';
         if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-outline-variant';
         if (label) label.textContent = TELEMETRY.formatStageBadge(i, STAGE_NAMES[i], false);
       }
@@ -258,12 +271,16 @@ function initLandingShowcase() {
         if (timelapseBtnIcon) timelapseBtnIcon.textContent = 'fast_forward';
         if (timelapseBtnText) {
           timelapseBtnText.textContent =
-            timelapseProgress >= 1.0 ? BUTTON_LABELS.REPLAY_TIMELAPSE : BUTTON_LABELS.PLAY_TIMELAPSE;
+            timelapseProgress >= 1.0
+              ? BUTTON_LABELS.REPLAY_TIMELAPSE
+              : BUTTON_LABELS.PLAY_TIMELAPSE;
         }
       }
     }
     if (canvasTimelapseLabel) {
-      canvasTimelapseLabel.textContent = isTimelapseRunning ? BUTTON_LABELS.CANVAS_PAUSE : BUTTON_LABELS.CANVAS_TIMELAPSE;
+      canvasTimelapseLabel.textContent = isTimelapseRunning
+        ? BUTTON_LABELS.CANVAS_PAUSE
+        : BUTTON_LABELS.CANVAS_TIMELAPSE;
     }
 
     if (toggleWiltBtn) {
@@ -622,8 +639,20 @@ function initLandingShowcase() {
       if (isMultiGarden || currentStage === 4) {
         const specimens = [
           { stage: 3, wilt: 0, seed: 12, xRatio: 0.25, scale: 0.8 },
-          { stage: Math.min(3, currentStage), wilt: isWilted ? 0.8 : 0, seed: 7, xRatio: 0.52, scale: 0.95 },
-          { stage: Math.max(1, (currentStage || 1) - 1), wilt: 0, seed: 23, xRatio: 0.78, scale: 0.75 },
+          {
+            stage: Math.min(3, currentStage),
+            wilt: isWilted ? 0.8 : 0,
+            seed: 7,
+            xRatio: 0.52,
+            scale: 0.95,
+          },
+          {
+            stage: Math.max(1, (currentStage || 1) - 1),
+            wilt: 0,
+            seed: 23,
+            xRatio: 0.78,
+            scale: 0.75,
+          },
         ];
         specimens.forEach((sp) => {
           drawSingleTree(w * sp.xRatio, h * 0.9, sp.stage, sp.wilt, sp.seed, now, sp.scale);

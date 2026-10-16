@@ -1,11 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": [
-    "react",
-    "unicorn",
-    "oxc",
-    "jsx-a11y"
-  ],
+  "plugins": ["react", "unicorn", "oxc", "jsx-a11y"],
   "categories": {
     "correctness": "warn"
   },
@@ -21,8 +16,5 @@
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn"
   },
-  "ignorePatterns": [
-    "dist/**",
-    "node_modules/**"
-  ]
+  "ignorePatterns": ["dist/**", "node_modules/**"]
 }

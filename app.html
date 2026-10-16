@@ -1,144 +1,48 @@
 <!doctype html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Garden Timer: Mindful Botanical Focus</title>
-	<link rel="icon" type="image/jpeg" href="/favicon.jpg"/>
-	<!-- Material Symbols Outlined -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
-	<!-- Google Fonts: Newsreader and Plus Jakarta Sans -->
-	<link rel="preconnect" href="https://fonts.googleapis.com"/>
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"/>
-	<!-- Tailwind CSS CDN -->
-	<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-	<script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    "colors": {
-                        "surface-variant": "#dce5db",
-                        "primary-fixed": "#bcf0ae",
-                        "inverse-surface": "#2a322c",
-                        "surface": "#f3fcf2",
-                        "on-surface-variant": "#42493e",
-                        "secondary-fixed": "#c1efb4",
-                        "on-primary-container": "#e8ffdd",
-                        "on-secondary-fixed-variant": "#294f24",
-                        "surface-container-low": "#edf6ec",
-                        "on-tertiary": "#ffffff",
-                        "surface-tint": "#3c6934",
-                        "surface-container-lowest": "#ffffff",
-                        "outline-variant": "#c2c9bb",
-                        "tertiary-fixed": "#ffd9e2",
-                        "outline": "#72796e",
-                        "error": "#ba1a1a",
-                        "surface-dim": "#d4dcd3",
-                        "surface-container": "#e8f0e7",
-                        "inverse-primary": "#a1d494",
-                        "inverse-on-surface": "#eaf3ea",
-                        "on-primary-fixed": "#002201",
-                        "surface-container-high": "#e2ebe1",
-                        "on-error-container": "#93000a",
-                        "secondary-container": "#c1efb4",
-                        "surface-bright": "#f3fcf2",
-                        "background": "#f3fcf2",
-                        "on-error": "#ffffff",
-                        "tertiary-fixed-dim": "#ffb1c7",
-                        "primary-fixed-dim": "#a1d494",
-                        "error-container": "#ffdad6",
-                        "on-tertiary-fixed-variant": "#782b48",
-                        "primary": "#376430",
-                        "on-background": "#161d18",
-                        "on-secondary-fixed": "#002201",
-                        "on-tertiary-fixed": "#3e001c",
-                        "tertiary": "#903e5b",
-                        "surface-container-highest": "#dce5db",
-                        "secondary-fixed-dim": "#a6d29a",
-                        "on-primary-fixed-variant": "#24501f",
-                        "tertiary-container": "#ad5673",
-                        "secondary": "#406839",
-                        "on-secondary": "#ffffff",
-                        "on-tertiary-container": "#fff6f7",
-                        "on-surface": "#161d18",
-                        "primary-container": "#4f7d46",
-                        "on-primary": "#ffffff",
-                        "on-secondary-container": "#466e3f"
-                    },
-                    "borderRadius": {
-                        "DEFAULT": "0.25rem",
-                        "lg": "0.5rem",
-                        "xl": "0.75rem",
-                        "full": "9999px"
-                    },
-                    "fontFamily": {
-                        "sans": ["Plus Jakarta Sans", "sans-serif"],
-                        "serif": ["Newsreader", "Georgia", "serif"],
-                        "body-sm": ["Plus Jakarta Sans", "sans-serif"],
-                        "headline-sm": ["Newsreader", "serif"],
-                        "label-sm": ["Plus Jakarta Sans", "sans-serif"],
-                        "headline-md": ["Newsreader", "serif"],
-                        "label-md": ["Plus Jakarta Sans", "sans-serif"],
-                        "headline-lg": ["Newsreader", "serif"],
-                        "body-md": ["Plus Jakarta Sans", "sans-serif"],
-                        "display-hero": ["Newsreader", "serif"],
-                        "timer-display": ["Newsreader", "serif"],
-                        "body-lg": ["Plus Jakarta Sans", "sans-serif"]
-                    }
-                }
-            }
-        }
-	</script>
-	<style>
-        .material-symbols-outlined {
-            font-family: 'Material Symbols Outlined' !important;
-            font-weight: normal;
-            font-style: normal;
-            font-size: 20px;
-            line-height: 1;
-            letter-spacing: normal;
-            text-transform: none;
-            display: inline-block;
-            white-space: nowrap;
-            word-wrap: normal;
-            direction: ltr;
-            -webkit-font-feature-settings: 'liga';
-            -webkit-font-smoothing: antialiased;
-            vertical-align: middle;
-        }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Garden Timer: Mindful Botanical Focus</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+    <!-- Material Symbols Outlined -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <!-- Google Fonts: Newsreader and Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+    />
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="/src/tailwind-app.css" />
+    <style>
+      .herbal-base {
+        background-color: #f3fcf2;
+      }
 
-        .pressed-paper-card {
-            background-color: #f4f1e8;
-            border: 1px solid #e5dfc9;
-            box-shadow: 0 4px 20px -2px rgba(35, 43, 37, 0.05), 0 1px 3px rgba(35, 43, 37, 0.02);
+      @keyframes gentleBreathing {
+        0%,
+        100% {
+          transform: scale(1) translateY(0);
         }
+        50% {
+          transform: scale(1.015) translateY(-2px);
+        }
+      }
 
-        .herbal-base {
-            background-color: #f3fcf2;
-        }
-
-        .dial-circle-progress {
-            transition: stroke-dashoffset 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes gentleBreathing {
-            0%, 100% {
-                transform: scale(1) translateY(0);
-            }
-            50% {
-                transform: scale(1.015) translateY(-2px);
-            }
-        }
-
-        .animate-botanical-breath {
-            animation: gentleBreathing 7s ease-in-out infinite;
-        }
-	</style>
-</head>
-<body class="herbal-base text-on-surface antialiased min-h-screen flex flex-col selection:bg-secondary-container selection:text-on-secondary-fixed-variant">
-<div id="root" class="min-h-screen flex flex-col"></div>
-<script type="module" src="/src/main.jsx"></script>
-</body>
+      .animate-botanical-breath {
+        animation: gentleBreathing 7s ease-in-out infinite;
+      }
+    </style>
+  </head>
+  <body
+    class="herbal-base text-on-surface antialiased min-h-screen flex flex-col selection:bg-secondary-container selection:text-on-secondary-fixed-variant"
+  >
+    <div id="root" class="min-h-screen flex flex-col"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

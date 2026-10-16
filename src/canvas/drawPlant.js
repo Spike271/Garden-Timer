@@ -1,6 +1,6 @@
 import { CANVAS_CONFIG } from '../config';
 
-// Pure drawing code. No React imports, so it stays testable in isolation.
+// Pure drawing code. No React imports
 
 const DEPTH_BY_STAGE = [0, 2, 4, 5];
 const TRUNK_LEN = 80;
@@ -26,8 +26,6 @@ function lerpColor(a, b, t) {
   const pb = hexToRgb(b);
   return `rgb(${pa.map((v, i) => Math.round(v + (pb[i] - v) * t)).join(',')})`;
 }
-
-// ---------- Sky & celestial (time-of-day, matches landing showcase) ----------
 
 function isDaytime(hour) {
   const { DAY_START_HOUR, DAY_END_HOUR } = CANVAS_CONFIG.SKY;
@@ -121,8 +119,14 @@ export function drawSky(ctx, w, h, hour) {
 }
 
 export function drawGround(ctx, w, h, night) {
-  const { TOP_RATIO, SOIL_COLOR, PEBBLE_COLOR, NIGHT_SOIL_COLOR, NIGHT_PEBBLE_COLOR, PEBBLE_COUNT } =
-    CANVAS_CONFIG.GROUND;
+  const {
+    TOP_RATIO,
+    SOIL_COLOR,
+    PEBBLE_COLOR,
+    NIGHT_SOIL_COLOR,
+    NIGHT_PEBBLE_COLOR,
+    PEBBLE_COUNT,
+  } = CANVAS_CONFIG.GROUND;
   const top = h * TOP_RATIO;
   ctx.fillStyle = night ? NIGHT_SOIL_COLOR : SOIL_COLOR;
   ctx.fillRect(0, top, w, h - top);

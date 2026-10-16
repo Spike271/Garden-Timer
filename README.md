@@ -43,7 +43,7 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 - **Language:** JavaScript (ES modules, JSX)
 - **UI:** React 18 and the HTML5 Canvas 2D API
 - **Build:** Vite 8 with `@vitejs/plugin-react`
-- **Styling:** Tailwind CSS (CDN), Google Fonts (Newsreader, Plus Jakarta Sans, Material Symbols)
+- **Styling:** Tailwind CSS 3, compiled at build time through PostCSS, plus Google Fonts (Newsreader, Plus Jakarta Sans, Material Symbols)
 - **Tooling:** Oxlint and Oxfmt
 - **Hosting:** GitHub Pages, deployed by GitHub Actions
 
@@ -120,7 +120,7 @@ The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon an
 There is no backend, analytics or account system. Two things do leave your browser:
 
 - **Weather.** The header reading uses the IP-based location from [GeoJS](https://get.geojs.io) to get approximate coordinates. If that fails, the browser asks for location permission instead. The coordinates are then sent to [Open-Meteo](https://open-meteo.com) for temperature, humidity and conditions. The result is cached locally.
-- **Third-party assets.** Tailwind (CDN script) and Google Fonts load from their own servers on page load.
+- **Third-party assets.** Google Fonts and the three gallery illustrations load from their own servers on page load. No third-party scripts run in your browser.
 
 ## Known limitations
 
@@ -128,7 +128,6 @@ There is no backend, analytics or account system. Two things do leave your brows
 - **Focus Hours** is completed sessions multiplied by the current focus length, so changing the length also changes past hours.
 - **Blooms Today** counts healthy blooms that reached full bloom on today's local date. Plants saved before bloom dates existed are never counted as today's.
 - Short and long break lengths are stored with the presets but have no editing UI yet.
-- Tailwind is loaded from its Play CDN, which is convenient but not intended for production use.
 
 ## Prerequisites
 

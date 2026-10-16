@@ -19,7 +19,6 @@ export const APP_STRINGS = Object.freeze({
     NIGHT_REST: 'Night Rest',
   }),
 
-
   PHASES: Object.freeze({
     LABELS: Object.freeze({
       [PHASES.WORK]: 'Deep Focus',

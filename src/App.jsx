@@ -18,7 +18,6 @@ const {
   STATS,
 } = APP_STRINGS;
 
-// BASE_URL is '/' locally and '/<repo>/' on GitHub Pages, so the logo resolves in both.
 const LOGO_SRC = `${import.meta.env.BASE_URL}favicon.jpg`;
 
 const PHASE_LABELS = PHASE_STRINGS.LABELS;
@@ -115,19 +114,13 @@ export default function App() {
           <div className="flex items-center gap-4 sm:gap-5">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden border border-outline-variant/50 shadow-xs">
-                <img
-                  src={LOGO_SRC}
-                  alt={BRAND.LOGO_ALT}
-                  className="w-full h-full object-cover"
-                />
+                <img src={LOGO_SRC} alt={BRAND.LOGO_ALT} className="w-full h-full object-cover" />
               </div>
               <div>
                 <span className="font-serif text-xl sm:text-2xl text-primary tracking-tight font-medium flex items-center gap-1.5">
                   {BRAND.NAME}
                 </span>
-                <p className="text-xs text-on-surface-variant font-medium m-0">
-                  {BRAND.TAGLINE}
-                </p>
+                <p className="text-xs text-on-surface-variant font-medium m-0">{BRAND.TAGLINE}</p>
               </div>
             </div>
           </div>
@@ -168,7 +161,8 @@ export default function App() {
               </svg>
             )}
             <span className="text-xs font-semibold text-on-surface tracking-wide">
-              {isDaylight ? CIRCADIAN.DAYLIGHT_STUDIO : CIRCADIAN.EVENING_STUDIO} · {timeString || CIRCADIAN.DEFAULT_TIME}
+              {isDaylight ? CIRCADIAN.DAYLIGHT_STUDIO : CIRCADIAN.EVENING_STUDIO} ·{' '}
+              {timeString || CIRCADIAN.DEFAULT_TIME}
             </span>
             <span className="w-1 h-1 rounded-full bg-outline-variant"></span>
             <span
@@ -192,7 +186,9 @@ export default function App() {
                 }`}
               ></span>
               <span>
-                {running ? PHASE_STRINGS.formatPhaseActive(PHASE_LABELS[phase]) : PHASE_STRINGS.formatPhaseReady(PHASE_LABELS[phase])}
+                {running
+                  ? PHASE_STRINGS.formatPhaseActive(PHASE_LABELS[phase])
+                  : PHASE_STRINGS.formatPhaseReady(PHASE_LABELS[phase])}
               </span>
             </div>
 
@@ -243,7 +239,9 @@ export default function App() {
                     toast.type === 'warning' ? 'text-error' : 'text-primary'
                   }`}
                 >
-                  {toast.type === 'warning' ? NOTIFICATIONS.BADGE_INTERRUPTION : NOTIFICATIONS.BADGE_GROWTH}
+                  {toast.type === 'warning'
+                    ? NOTIFICATIONS.BADGE_INTERRUPTION
+                    : NOTIFICATIONS.BADGE_GROWTH}
                 </strong>
                 {toast.text}
               </p>
@@ -308,7 +306,8 @@ export default function App() {
                   </svg>
                 )}
                 <span>
-                  {timeString || CIRCADIAN.DEFAULT_TIME} · {isDaylight ? CIRCADIAN.DAYLIGHT_STUDIO : CIRCADIAN.EVENING_STUDIO}
+                  {timeString || CIRCADIAN.DEFAULT_TIME} ·{' '}
+                  {isDaylight ? CIRCADIAN.DAYLIGHT_STUDIO : CIRCADIAN.EVENING_STUDIO}
                 </span>
               </div>
             </div>
@@ -320,7 +319,9 @@ export default function App() {
                   className={`w-1.5 h-1.5 rounded-full ${running ? 'bg-primary animate-pulse' : 'bg-primary'}`}
                 ></span>
                 <span>
-                  {running ? PHASE_STRINGS.formatPhaseActive(PHASE_LABELS[phase]) : PHASE_STRINGS.formatPhaseReady(PHASE_LABELS[phase])}
+                  {running
+                    ? PHASE_STRINGS.formatPhaseActive(PHASE_LABELS[phase])
+                    : PHASE_STRINGS.formatPhaseReady(PHASE_LABELS[phase])}
                 </span>
               </span>
             </div>
@@ -330,7 +331,9 @@ export default function App() {
           <div className="bg-surface border-b border-outline-variant/40 px-4 sm:px-6 py-3 overflow-x-auto">
             <div className="flex items-center justify-between min-w-[580px] gap-3 text-xs">
               <div className="flex items-center gap-2">
-                <span className="text-on-surface-variant/80 font-medium">{SPECIMEN.PROGRESSION_TITLE}</span>
+                <span className="text-on-surface-variant/80 font-medium">
+                  {SPECIMEN.PROGRESSION_TITLE}
+                </span>
                 {STAGE_NAMES.map((name, idx) => {
                   const isCurrent = active.stage === idx;
                   const isPast = active.stage > idx;
@@ -389,9 +392,7 @@ export default function App() {
                 <span className="material-symbols-outlined text-[13px]">
                   {active.wilted ? 'warning' : 'energy_savings_leaf'}
                 </span>
-                <span>
-                  {active.wilted ? SPECIMEN.WILTED_WARNING : SPECIMEN.WILT_WARNING}
-                </span>
+                <span>{active.wilted ? SPECIMEN.WILTED_WARNING : SPECIMEN.WILT_WARNING}</span>
               </div>
             </div>
           </div>
@@ -561,7 +562,11 @@ export default function App() {
                         <circle cx="12" cy="12" r="10" />
                         <polyline points="12 6 12 12 16 14" />
                       </svg>
-                      <span>{phase === PHASES.WORK ? PHASE_STRINGS.FORFEIT_CYCLE : PHASE_STRINGS.SKIP_BREAK}</span>
+                      <span>
+                        {phase === PHASES.WORK
+                          ? PHASE_STRINGS.FORFEIT_CYCLE
+                          : PHASE_STRINGS.SKIP_BREAK}
+                      </span>
                     </button>
                   )}
                 </div>
@@ -620,7 +625,9 @@ export default function App() {
                       <path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 3.43 6.05 8.05z" />
                     </svg>
                     <span className="font-semibold text-on-surface">
-                      {active.wilted ? SPECIMEN.GROWTH_WILTED : SPECIMEN.formatGrowth(active.stage, STAGE_NAMES.length)}
+                      {active.wilted
+                        ? SPECIMEN.GROWTH_WILTED
+                        : SPECIMEN.formatGrowth(active.stage, STAGE_NAMES.length)}
                     </span>
                   </div>
                   <span className="w-px h-3.5 bg-outline-variant/60"></span>
@@ -728,9 +735,7 @@ export default function App() {
               className="w-5 h-5 rounded-md object-cover shadow-xs border border-outline-variant/50"
             />
             <span className="font-serif text-sm text-primary font-medium">{BRAND.NAME}</span>
-            <span className="hidden sm:inline">
-              {BRAND.FOOTER_TAGLINE}
-            </span>
+            <span className="hidden sm:inline">{BRAND.FOOTER_TAGLINE}</span>
           </div>
           <p className="m-0">{BRAND.FOOTER_COPYRIGHT}</p>
         </div>
