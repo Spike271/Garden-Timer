@@ -14,6 +14,12 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 
 ## Screenshots
 
+![Main Landing Page](docs/landing-page.png)
+
+![Main Pomodoro Timer Page](docs/app.png)
+
+![Timelapse](docs/timelapse.gif)
+
 ![Growth stages: seed, sprout, sapling, bloom, and a wilted sapling](docs/growth-stages.png)
 
 ![The same bloom at dawn, midday, golden hour and night](docs/sky-cycle.png)
@@ -29,6 +35,7 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 - **Live weather** in the header (see [Network and privacy](#network-and-privacy)).
 - **Drift-proof timer** — it stores an absolute end time, so throttled background tabs can't skew the countdown.
 - **Landing page** with an interactive timelapse that runs a tree through a day.
+- **Honest stats** — sessions completed, blooms grown today, and focus hours. All start at zero.
 - **Local-only** — no accounts and no backend. Your garden lives in `localStorage`.
 
 ## Technologies Used
@@ -100,13 +107,13 @@ The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon an
 
 ### What is saved
 
-| `localStorage` key      | Contents                                                        |
-| ----------------------- | --------------------------------------------------------------- |
-| `garden-timer:garden`   | Every plant: stage and wilt state.                              |
-| `garden-timer:presets`  | Focus and break lengths.                                        |
-| `garden-timer:workDone` | Completed focus sessions.                                       |
-| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                      |
-| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load. |
+| `localStorage` key      | Contents                                                                |
+| ----------------------- | ----------------------------------------------------------------------- |
+| `garden-timer:garden`   | Every plant: stage, wilt state, and the day it last reached full bloom. |
+| `garden-timer:presets`  | Focus and break lengths.                                                |
+| `garden-timer:workDone` | Completed focus sessions.                                               |
+| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                              |
+| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load.         |
 
 ## Network and privacy
 
@@ -118,8 +125,8 @@ There is no backend, analytics or account system. Two things do leave your brows
 ## Known limitations
 
 - The running timer is not persisted across reloads.
-- The footer stat labels are looser than their values. **Blooms Today** counts every healthy bloom in the garden, and **Sanctuary Streak** shows total completed sessions rather than consecutive days. **Focus Hours** is completed sessions multiplied by the current focus length.
-- The **Rain on Greenhouse Glass** badge is decorative. There is no audio.
+- **Focus Hours** is completed sessions multiplied by the current focus length, so changing the length also changes past hours.
+- **Blooms Today** counts healthy blooms that reached full bloom on today's local date. Plants saved before bloom dates existed are never counted as today's.
 - Short and long break lengths are stored with the presets but have no editing UI yet.
 - Tailwind is loaded from its Play CDN, which is convenient but not intended for production use.
 
@@ -155,15 +162,6 @@ There is no backend, analytics or account system. Two things do leave your brows
    npm run preview
    ```
 2. Output goes to `dist/`.
-
-### Deploy to GitHub Pages
-
-1. Push the repository to GitHub with `main` as the default branch.
-2. Go to **Settings → Pages → Build and deployment → Source** and choose **GitHub Actions**.
-3. Push to `main`. The workflow in `.github/workflows/deploy.yml` builds the site and publishes it.
-4. Your site appears at `https://<username>.github.io/<repo-name>/`, and the app at `.../app.html`.
-
-> The workflow sets `BASE_PATH=/<repo-name>/` so assets resolve under the repository subpath. To test that build locally, run `BASE_PATH=/Garden-Timer/ npm run build`. Without `BASE_PATH`, the base is `/`.
 
 ### Scripts
 

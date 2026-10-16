@@ -4,13 +4,13 @@ import { clampFocus, useSettings } from './state/SettingsContext';
 import { usePomodoro } from './hooks/usePomodoro';
 import PlantCanvas from './components/PlantCanvas';
 import { useWeather } from './hooks/useWeather';
-import { PHASES, STAGES } from './state/constants';
+import { PHASES } from './state/constants';
+import { countBloomsOn, localDateKey } from './state/gardenLogic';
 import { APP_STRINGS, WEATHER_CONFIG } from './config';
 
 const {
   BRAND,
   CIRCADIAN,
-  SOUNDSCAPE,
   PHASES: PHASE_STRINGS,
   NOTIFICATIONS,
   CADENCE,
@@ -94,7 +94,7 @@ export default function App() {
   }, [toast]);
 
   const active = plants[plants.length - 1];
-  const blooms = plants.filter((p) => p.stage === STAGES.length - 1 && !p.wilted).length;
+  const blooms = countBloomsOn(plants, localDateKey());
   const sessionInCycle = (workDone % 4) + 1;
 
   const handlePresetClick = (mins) => {
@@ -313,14 +313,8 @@ export default function App() {
               </div>
             </div>
 
-            {/* Right: Soundscape & Active Session Telemetry */}
+            {/* Right: Active Session Telemetry */}
             <div className="flex items-center gap-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface border border-outline-variant/40 text-on-surface-variant text-[11px] font-medium">
-                <svg className="w-3 h-3 text-secondary" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-                </svg>
-                <span>{SOUNDSCAPE.GREENHOUSE_RAIN}</span>
-              </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed-variant text-[11px] font-semibold">
                 <span
                   className={`w-1.5 h-1.5 rounded-full ${running ? 'bg-primary animate-pulse' : 'bg-primary'}`}
@@ -604,15 +598,15 @@ export default function App() {
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] font-semibold text-primary tracking-widest uppercase">
-                      {SPECIMEN.NUMBER}
+                      {SPECIMEN.formatNumber(plants.length)}
                     </span>
                     <span className="w-1 h-1 rounded-full bg-outline-variant"></span>
                     <span className="text-[10px] font-medium text-on-surface-variant">
-                      {SPECIMEN.PLOT_LOCATION}
+                      {SPECIMEN.formatGarden(plants.length)}
                     </span>
                   </div>
                   <h3 className="font-serif text-xl sm:text-2xl text-on-surface mt-0.5 mb-0 font-normal">
-                    {SPECIMEN.SPECIES_NAME}
+                    {SPECIMEN.TREE_NAME}
                   </h3>
                 </div>
 
@@ -623,10 +617,10 @@ export default function App() {
                       viewBox="0 0 24 24"
                       fill="currentColor"
                     >
-                      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                      <path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.39 9.32 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 3.43 6.05 8.05z" />
                     </svg>
                     <span className="font-semibold text-on-surface">
-                      {active.wilted ? SPECIMEN.MOISTURE_WILTED : SPECIMEN.MOISTURE_HEALTHY}
+                      {active.wilted ? SPECIMEN.GROWTH_WILTED : SPECIMEN.formatGrowth(active.stage, STAGE_NAMES.length)}
                     </span>
                   </div>
                   <span className="w-px h-3.5 bg-outline-variant/60"></span>
@@ -709,12 +703,12 @@ export default function App() {
 
                 <div className="p-2.5 rounded-lg bg-surface border border-outline-variant/30">
                   <span className="text-[10px] font-semibold text-on-surface-variant block uppercase tracking-wider">
-                    {STATS.SANCTUARY_STREAK_LABEL}
+                    {STATS.SESSIONS_LABEL}
                   </span>
                   <span className="font-serif text-base sm:text-lg text-secondary font-medium">
-                    {workDone || STATS.DEFAULT_STREAK_DAYS}{' '}
+                    {workDone}{' '}
                     <span className="text-[11px] font-sans text-on-surface-variant font-normal">
-                      {STATS.DAYS_UNIT}
+                      {workDone === 1 ? STATS.SESSION_UNIT : STATS.SESSIONS_UNIT}
                     </span>
                   </span>
                 </div>

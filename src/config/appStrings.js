@@ -19,9 +19,6 @@ export const APP_STRINGS = Object.freeze({
     NIGHT_REST: 'Night Rest',
   }),
 
-  SOUNDSCAPE: Object.freeze({
-    GREENHOUSE_RAIN: 'Rain on Greenhouse Glass',
-  }),
 
   PHASES: Object.freeze({
     LABELS: Object.freeze({
@@ -61,9 +58,12 @@ export const APP_STRINGS = Object.freeze({
   }),
 
   SPECIMEN: Object.freeze({
-    NUMBER: 'Specimen No. 042',
-    PLOT_LOCATION: 'Active Soil Nursery: Linen Plot 04',
-    SPECIES_NAME: 'Acer Palmatum (Japanese Maple)',
+    // Real readouts: the plant's position in your garden, plant count, and growth stage.
+    formatNumber: (n) => `Specimen No. ${String(n).padStart(3, '0')}`,
+    formatGarden: (count) => `Your garden · ${count} ${count === 1 ? 'plant' : 'plants'}`,
+    TREE_NAME: 'Procedural Tree',
+    formatGrowth: (stageIndex, totalStages) => `Growth ${stageIndex + 1} / ${totalStages}`,
+    GROWTH_WILTED: 'Wilted',
     PROGRESSION_TITLE: 'Progression Cycle:',
     STAGE_NAMES: Object.freeze(['Seed Rest', 'Sprout', 'Sapling', 'Bloom']),
     formatStageLabel: (stageIndex, stageName, isCurrent) =>
@@ -72,8 +72,6 @@ export const APP_STRINGS = Object.freeze({
     RESTORATIVE_PAUSE: 'Restorative Pause',
     WILT_WARNING: 'Leaving early wilts plant',
     WILTED_WARNING: 'Seedling wilted from interruption',
-    MOISTURE_HEALTHY: '94%',
-    MOISTURE_WILTED: '38%',
     CANVAS_ARIA_LABEL: 'Your garden',
   }),
 
@@ -83,8 +81,8 @@ export const APP_STRINGS = Object.freeze({
     BLOOMS_TODAY_LABEL: 'Blooms Today',
     FOCUS_HOURS_LABEL: 'Focus Hours',
     HOURS_UNIT: 'hrs',
-    SANCTUARY_STREAK_LABEL: 'Sanctuary Streak',
-    DAYS_UNIT: 'Days',
-    DEFAULT_STREAK_DAYS: 4,
+    SESSIONS_LABEL: 'Sessions Completed',
+    SESSION_UNIT: 'session',
+    SESSIONS_UNIT: 'sessions',
   }),
 });

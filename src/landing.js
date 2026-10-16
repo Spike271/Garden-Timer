@@ -11,7 +11,8 @@ const {
   TAXONOMIC_BEDS,
   DIAL_DESCRIPTIONS,
   SUN_LABELS,
-  MOISTURE_LEVELS,
+  GROWTH_READOUT,
+  SPECIMEN_LABELS,
   TELEMETRY,
 } = LANDING_CONFIG;
 
@@ -66,7 +67,9 @@ function initLandingShowcase() {
   const circadianIcon = document.getElementById('showcase-circadian-icon');
   const sunIcon = document.getElementById('showcase-sun-icon');
   const sunLabel = document.getElementById('showcase-sun-label');
-  const moistureVal = document.getElementById('showcase-moisture-val');
+  const growthVal = document.getElementById('showcase-growth-val');
+  const specimenNo = document.getElementById('showcase-specimen-no');
+  const gardenLine = document.getElementById('showcase-garden-line');
   const taxonomicDot = document.getElementById('showcase-taxonomic-dot');
   const taxonomicBadge = document.getElementById('showcase-taxonomic-badge');
   const heroDisplayPill = document.getElementById('hero-display-pill');
@@ -134,7 +137,15 @@ function initLandingShowcase() {
         : SUN_LABELS.MOONLIGHT_REST;
     }
 
-    if (moistureVal) moistureVal.textContent = isWilted ? MOISTURE_LEVELS.WILTED : MOISTURE_LEVELS.HEALTHY;
+    // Real readouts: growth stage of the demo plant, and how many plants are on screen.
+    const plantCount = isMultiGarden || currentStage === 4 ? 3 : 1;
+    if (growthVal) {
+      growthVal.textContent = isWilted
+        ? GROWTH_READOUT.WILTED
+        : GROWTH_READOUT.format(Math.min(currentStage, GROWTH_READOUT.TOTAL_STAGES - 1), GROWTH_READOUT.TOTAL_STAGES);
+    }
+    if (specimenNo) specimenNo.textContent = SPECIMEN_LABELS.formatNumber(plantCount);
+    if (gardenLine) gardenLine.textContent = SPECIMEN_LABELS.formatGarden(plantCount);
     if (taxonomicDot) taxonomicDot.className = `w-1.5 h-1.5 rounded-full ${isWilted ? 'bg-error' : 'bg-primary'}`;
     if (taxonomicBadge) {
       taxonomicBadge.textContent = isWilted
@@ -172,7 +183,7 @@ function initLandingShowcase() {
       statHours.innerHTML = `${hrs} <span class="text-[11px] font-sans text-on-surface-variant font-normal">${TELEMETRY.HOURS_UNIT}</span>`;
     }
     if (statStreak) {
-      statStreak.innerHTML = `${Math.max(0, workDoneCount)} <span class="text-[11px] font-sans text-on-surface-variant font-normal">${TELEMETRY.DAYS_UNIT}</span>`;
+      statStreak.innerHTML = `${Math.max(0, workDoneCount)} <span class="text-[11px] font-sans text-on-surface-variant font-normal">${workDoneCount === 1 ? TELEMETRY.SESSION_UNIT : TELEMETRY.SESSIONS_UNIT}</span>`;
     }
 
     if (sessionDot && sessionText) {

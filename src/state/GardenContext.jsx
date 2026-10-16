@@ -1,10 +1,9 @@
 import {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
 import {MAX_STAGE} from './constants';
 import {STORAGE_KEYS} from '../config';
+import {growPlants, localDateKey, newSeed, wiltPlants} from './gardenLogic';
 
-const newSeed = () => ({stage: 0, wilted: false});
-
-// plants: array of { stage, wilted }. The last plant is the active one.
+// plants: array of { stage, wilted, bloomedOn? }. The last plant is the active one.
 function loadPlants() {
     try {
         const raw = localStorage.getItem(STORAGE_KEYS.GARDEN);
@@ -37,29 +36,16 @@ export function GardenProvider({children}) {
         }
     }, [plants]);
 
-    // Completed focus session: the active plant grows and clears any wilt.
-    // If the active plant is already a healthy bloom, plant a new seed as the new active plant.
+    // Completed focus session: the active plant grows and clears any wilt, and records the day
+    // it reaches full bloom. If the active plant is already a healthy bloom, a new seed is planted.
     const grow = useCallback(() => {
-        setPlants((list) => {
-            const next = list.slice();
-            const last = next[next.length - 1];
-            if (last.stage >= MAX_STAGE && !last.wilted) {
-                next.push(newSeed());
-            } else {
-                next[next.length - 1] = {stage: Math.min(MAX_STAGE, last.stage + 1), wilted: false};
-            }
-            return next;
-        });
+        const today = localDateKey();
+        setPlants((list) => growPlants(list, today));
     }, []);
 
     // Skipped focus session: the active plant drops one stage and wilts.
     const wilt = useCallback(() => {
-        setPlants((list) => {
-            const next = list.slice();
-            const last = next[next.length - 1];
-            next[next.length - 1] = {stage: Math.max(0, last.stage - 1), wilted: true};
-            return next;
-        });
+        setPlants((list) => wiltPlants(list));
     }, []);
 
     const value = useMemo(() => ({plants, grow, wilt}), [plants, grow, wilt]);

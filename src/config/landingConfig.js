@@ -56,9 +56,6 @@ export const LANDING_CONFIG = Object.freeze({
     formatNurturing: (stageName) => `Nurturing ${stageName}`,
   }),
 
-  SOUNDSCAPE: Object.freeze({
-    GREENHOUSE_RAIN: 'Rain on Greenhouse Glass',
-  }),
 
   SUN_LABELS: Object.freeze({
     GOLDEN_SUN: 'Golden Sun',
@@ -66,14 +63,21 @@ export const LANDING_CONFIG = Object.freeze({
     MOONLIGHT_REST: 'Moonlight Rest',
   }),
 
-  MOISTURE_LEVELS: Object.freeze({
-    HEALTHY: '94%',
-    WILTED: '38%',
+  // Real readouts for the demo plant. The demo has 4 growth stages (the 5th "Full Garden" view is 3 plants).
+  GROWTH_READOUT: Object.freeze({
+    TOTAL_STAGES: 4,
+    WILTED: 'Wilted',
+    format: (stageIndex, total) => `Growth ${stageIndex + 1} / ${total}`,
+  }),
+  SPECIMEN_LABELS: Object.freeze({
+    formatNumber: (n) => `Specimen No. ${String(n).padStart(3, '0')}`,
+    formatGarden: (count) => `Your garden · ${count} ${count === 1 ? 'plant' : 'plants'}`,
   }),
 
   TELEMETRY: Object.freeze({
     HOURS_UNIT: 'hrs',
-    DAYS_UNIT: 'Days',
+    SESSION_UNIT: 'session',
+    SESSIONS_UNIT: 'sessions',
     WILTED_SUFFIX: ' (Wilted)',
     MINUTES_SUFFIX: 'm',
     formatHeroPillTimelapse: (percent) => `Timelapse (${percent}%)`,
