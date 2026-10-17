@@ -1,0 +1,74 @@
+name: Hourly Garden Timer Screenshot & 10 AM PDF
+
+on:
+  schedule:
+    # Runs at minute 30 of every UTC hour, which corresponds to :00 of every hour in IST (UTC+5:30).
+    # For example, 04:30 UTC = 10:00 AM IST.
+    - cron: '30 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_compile:
+        description: 'Compile all current screenshots into a PDF immediately'
+        required: false
+        default: 'false'
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: garden-timer-screenshots
+  cancel-in-progress: false
+
+jobs:
+  capture-and-compile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install Python dependencies and Playwright Chromium
+        run: |
+          pip install playwright Pillow
+          playwright install --with-deps chromium
+
+      - name: Capture screenshot and compile PDF at 10 AM IST
+        id: capture
+        env:
+          TARGET_URL: 'https://spike271.github.io/Garden-Timer/app.html'
+          TIMEZONE: 'Asia/Kolkata'
+          COMPILE_HOUR: '10'
+          FORCE_COMPILE: ${{ github.event.inputs.force_compile || 'false' }}
+          CLEAR_AFTER_COMPILE: 'true'
+        run: python3 screenshot_and_compile.py
+
+      - name: Commit and push screenshots / compiled PDF to repository
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          [ -d screenshots ] && git add -A screenshots/
+          [ -d compiled_pdfs ] && git add -A compiled_pdfs/
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update hourly screenshot / compiled PDF ($(date -u +'%Y-%m-%d %H:%M UTC'))"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Upload compiled 10 AM PDF as a downloadable workflow artifact
+        if: steps.capture.outputs.pdf_compiled == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: garden-timer-pdf-${{ github.run_number }}
+          path: ${{ steps.capture.outputs.pdf_path }}
+          retention-days: 30

@@ -6,7 +6,7 @@ const { CADENCE } = APP_STRINGS;
 
 // Focus presets + steppers for focus, short break and long break lengths.
 export default function CadenceControls() {
-  const { presets, setMinutes } = useSettings();
+  const { presets, setMinutes, stepMinutes } = useSettings();
 
   return (
     <div className="mb-6 space-y-3">
@@ -31,7 +31,7 @@ export default function CadenceControls() {
         <MinutesStepper
           value={presets.focusMinutes}
           step={5}
-          onStep={(d) => setMinutes('focusMinutes', presets.focusMinutes + d)}
+          onStep={(d) => stepMinutes('focusMinutes', d)}
           decreaseAria={CADENCE.DECREASE_MINUTES_ARIA}
           increaseAria={CADENCE.INCREASE_MINUTES_ARIA}
         />
@@ -42,7 +42,7 @@ export default function CadenceControls() {
           label={CADENCE.SHORT_BREAK_LABEL}
           value={presets.shortBreakMinutes}
           step={1}
-          onStep={(d) => setMinutes('shortBreakMinutes', presets.shortBreakMinutes + d)}
+          onStep={(d) => stepMinutes('shortBreakMinutes', d)}
           decreaseAria={CADENCE.DECREASE_SHORT_BREAK_ARIA}
           increaseAria={CADENCE.INCREASE_SHORT_BREAK_ARIA}
         />
@@ -50,7 +50,7 @@ export default function CadenceControls() {
           label={CADENCE.LONG_BREAK_LABEL}
           value={presets.longBreakMinutes}
           step={1}
-          onStep={(d) => setMinutes('longBreakMinutes', presets.longBreakMinutes + d)}
+          onStep={(d) => stepMinutes('longBreakMinutes', d)}
           decreaseAria={CADENCE.DECREASE_LONG_BREAK_ARIA}
           increaseAria={CADENCE.INCREASE_LONG_BREAK_ARIA}
         />

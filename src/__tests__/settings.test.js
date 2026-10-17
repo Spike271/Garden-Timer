@@ -6,12 +6,15 @@ describe('clampMinutes', () => {
     expect(clampMinutes('shortBreakMinutes', 999)).toBe(60);
     expect(clampMinutes('longBreakMinutes', 999)).toBe(120);
     expect(clampMinutes('focusMinutes', 999)).toBe(180);
-    expect(clampMinutes('shortBreakMinutes', 0)).toBe(5); // invalid -> default
+    expect(clampMinutes('shortBreakMinutes', 0)).toBe(1); // sticks at the floor, no wrap
+    expect(clampMinutes('shortBreakMinutes', 'abc')).toBe(5); // garbage -> default
     expect(clampMinutes('longBreakMinutes', '12')).toBe(12);
   });
 
   it('clampFocus stays compatible', () => {
-    expect(clampFocus(-5)).toBe(25);
+    expect(clampFocus(0)).toBe(5);
+    expect(clampFocus(-5)).toBe(5);
+    expect(clampFocus(NaN)).toBe(25);
     expect(clampFocus(200)).toBe(180);
   });
 });

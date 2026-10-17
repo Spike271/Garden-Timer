@@ -1,9 +1,13 @@
 import { APP_STRINGS } from '../config';
+import { useHoldRepeat } from '../hooks/useHoldRepeat';
 
 const { CADENCE } = APP_STRINGS;
 
 // Compact -/+ pill. onStep receives the signed delta in minutes.
 export default function MinutesStepper({ label, value, step, onStep, decreaseAria, increaseAria }) {
+  const decrease = useHoldRepeat(() => onStep(-step));
+  const increase = useHoldRepeat(() => onStep(step));
+
   return (
     <div className="flex items-center justify-between gap-2">
       {label && (
@@ -15,8 +19,8 @@ export default function MinutesStepper({ label, value, step, onStep, decreaseAri
         <button
           type="button"
           aria-label={decreaseAria}
-          onClick={() => onStep(-step)}
-          className="text-on-surface-variant hover:text-primary transition-colors p-1 bg-transparent border-0 cursor-pointer flex items-center justify-center rounded"
+          {...decrease}
+          className="touch-manipulation select-none text-on-surface-variant hover:text-primary transition-colors p-1 bg-transparent border-0 cursor-pointer flex items-center justify-center rounded"
         >
           <svg
             className="w-3 h-3"
@@ -35,8 +39,8 @@ export default function MinutesStepper({ label, value, step, onStep, decreaseAri
         <button
           type="button"
           aria-label={increaseAria}
-          onClick={() => onStep(step)}
-          className="text-on-surface-variant hover:text-primary transition-colors p-1 bg-transparent border-0 cursor-pointer flex items-center justify-center rounded"
+          {...increase}
+          className="touch-manipulation select-none text-on-surface-variant hover:text-primary transition-colors p-1 bg-transparent border-0 cursor-pointer flex items-center justify-center rounded"
         >
           <svg
             className="w-3 h-3"

@@ -27,7 +27,7 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 ## Features
 
 - **Pomodoro cycle** — focus, short break, focus, … with a long break after every 4th completed focus session.
-- **Editable lengths** — focus presets of 25, 45 and 50 minutes, plus a ±5 minute stepper (1–180 min). Short break (1–60 min) and long break (1–120 min) have ±1 minute steppers. Saved locally and applied from the next session.
+- **Editable lengths** — focus presets of 25, 45 and 50 minutes, plus a ±5 minute stepper (5–180 min), hold to repeat. Short break (1–60 min) and long break (1–120 min) have ±1 minute steppers. Saved locally and applied from the next session.
 - **Survives reloads** — a running session is restored after a refresh or closed tab, with the correct time left.
 - **Procedural plant** — a recursive branch renderer draws four growth stages with a gentle idle sway. No sprite art.
 - **Wilt and recovery** — a forfeited focus session drops the plant one stage and wilts it. The next completed session heals it.
@@ -67,7 +67,7 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 | **Forfeit Cycle (Wilt)** | During focus: abandons the session. The plant drops one stage and wilts. |
 | **Skip Break**           | During a break: ends it and returns to focus. No effect on the plant.    |
 | **25 / 45 / 50 presets** | Sets the next focus length.                                              |
-| **− / + stepper**        | Changes the focus length by 5 minutes, clamped to 1–180.                 |
+| **− / + stepper**        | Changes the focus length by 5 minutes, clamped to 5–180. Hold to repeat.                 |
 | **Intention field**      | A free-text note for the session. Kept in memory only.                   |
 | **Back link (header)**   | Returns to the landing page.                                             |
 
@@ -89,7 +89,7 @@ Stages in order: **seed → sprout → sapling → bloom**.
 
 | Phase       | Default length                                  | Editable in the UI |
 | ----------- | ----------------------------------------------- | ------------------ |
-| Focus       | 25 min                                          | Yes (1–180 min)    |
+| Focus       | 25 min                                          | Yes (5–180 min)    |
 | Short break | 5 min                                           | Yes (1–60 min)     |
 | Long break  | 15 min, after every 4th completed focus session | Yes (1–120 min)    |
 
@@ -108,14 +108,14 @@ The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon an
 
 ### What is saved
 
-| `localStorage` key      | Contents                                                                 |
-| ----------------------- | ------------------------------------------------------------------------ |
-| `garden-timer:garden`   | Every plant: stage, wilt state, and the day it last reached full bloom.  |
-| `garden-timer:presets`  | Focus and break lengths.                                                 |
+| `localStorage` key      | Contents                                                                |
+| ----------------------- | ----------------------------------------------------------------------- |
+| `garden-timer:garden`   | Every plant: stage, wilt state, and the day it last reached full bloom. |
+| `garden-timer:presets`  | Focus and break lengths.                                                |
 | `garden-timer:timer`    | Timer state: phase, absolute end time, sessions done, banked focus time. |
-| `garden-timer:workDone` | Legacy session count, migrated automatically (focus hours estimated).    |
-| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                               |
-| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load.          |
+| `garden-timer:workDone` | Legacy session count, migrated automatically (focus hours estimated).   |
+| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                              |
+| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load.         |
 
 ## Network and privacy
 
@@ -174,15 +174,15 @@ The running timer is saved on start, skip and completion. On reload:
 
 ### Scripts
 
-| Script                 | Description                                                     |
-| ---------------------- | --------------------------------------------------------------- |
-| `npm run dev`          | Dev server with HMR.                                            |
-| `npm run build`        | Production build of both pages.                                 |
-| `npm run preview`      | Serves the production build locally.                            |
+| Script                 | Description                               |
+| ---------------------- | ----------------------------------------- |
+| `npm run dev`          | Dev server with HMR.                      |
+| `npm run build`        | Production build of both pages.           |
+| `npm run preview`      | Serves the production build locally.      |
 | `npm test`             | Runs the Vitest suite (reducer, storage, settings, components). |
-| `npm run lint`         | Runs Oxlint.                                                    |
-| `npm run format`       | Formats the code with Oxfmt.                                    |
-| `npm run format:check` | Checks formatting without changing files.                       |
+| `npm run lint`         | Runs Oxlint.                              |
+| `npm run format`       | Formats the code with Oxfmt.              |
+| `npm run format:check` | Checks formatting without changing files. |
 
 ## Acknowledgements
 

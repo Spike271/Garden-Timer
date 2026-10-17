@@ -5,7 +5,7 @@ const DEFAULTS = Object.freeze({ focusMinutes: 25, shortBreakMinutes: 5, longBre
 
 // [min, max] minutes per preset.
 export const LIMITS = Object.freeze({
-  focusMinutes: Object.freeze([1, 180]),
+  focusMinutes: Object.freeze([5, 180]),
   shortBreakMinutes: Object.freeze([1, 60]),
   longBreakMinutes: Object.freeze([1, 120]),
 });
@@ -15,7 +15,8 @@ export const FOCUS_MAX = LIMITS.focusMinutes[1];
 export function clampMinutes(key, value) {
   const [min, max] = LIMITS[key];
   const n = Math.round(Number(value));
-  if (!Number.isFinite(n) || n <= 0) return DEFAULTS[key];
+  // Only garbage falls back to the default. Out-of-range values stick to the nearest bound.
+  if (!Number.isFinite(n)) return DEFAULTS[key];
   return Math.min(max, Math.max(min, n));
 }
 
@@ -55,11 +56,16 @@ export function SettingsProvider({ children }) {
     return clamped;
   }, []);
 
+  // Relative step on the latest value, safe for rapid hold-to-repeat calls.
+  const stepMinutes = useCallback((key, delta) => {
+    setPresets((p) => ({ ...p, [key]: clampMinutes(key, p[key] + delta) }));
+  }, []);
+
   const setFocusMinutes = useCallback((value) => setMinutes('focusMinutes', value), [setMinutes]);
 
   const value = useMemo(
-    () => ({ presets, setFocusMinutes, setMinutes }),
-    [presets, setFocusMinutes, setMinutes],
+    () => ({ presets, setFocusMinutes, setMinutes, stepMinutes }),
+    [presets, setFocusMinutes, setMinutes, stepMinutes],
   );
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }

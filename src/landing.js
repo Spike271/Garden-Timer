@@ -1,4 +1,6 @@
 import { LANDING_CONFIG } from './config';
+import { growPlants, newSeed } from './state/gardenLogic';
+import { MAX_STAGE } from './state/constants';
 import {
   drawSky as drawSharedSky,
   drawGround as drawSharedGround,
@@ -37,6 +39,10 @@ function initLandingShowcase() {
   let timelapseProgress = 0.0;
   let timelapseSpeed = 15;
   let isMultiGarden = false;
+  // Timelapse replays the app's real growth rules: 3 sessions grow a plant to bloom and the
+  // next session plants a fresh seed, so 3 full blooms take 11 sessions.
+  const TIMELAPSE_SESSIONS = 11;
+  let demoPlants = null;
   let lastFrameTime = performance.now();
 
   const petals = Array.from({ length: 9 }, () => ({
@@ -146,7 +152,12 @@ function initLandingShowcase() {
     }
 
     // Real readouts: growth stage of the demo plant, and how many plants are on screen.
-    const plantCount = isMultiGarden || currentStage === 4 ? 3 : 1;
+    const plantCount =
+      timelapseProgress > 0 && demoPlants
+        ? demoPlants.length
+        : isMultiGarden || currentStage === 4
+          ? 3
+          : 1;
     if (growthVal) {
       growthVal.textContent = isWilted
         ? GROWTH_READOUT.WILTED
@@ -231,19 +242,22 @@ function initLandingShowcase() {
     if (timelapseScrubber) timelapseScrubber.value = Math.round(timelapseProgress * 100);
     if (timelapsePercent) timelapsePercent.textContent = `${Math.round(timelapseProgress * 100)}%`;
     if (timelapsePhaseText) {
-      const progressPercent = Math.round(timelapseProgress * 100);
+      // Caption follows the real simulated state, not a percentage guess.
+      const live = timelapseProgress > 0 && demoPlants;
+      const blooms = live ? demoPlants.filter((pl) => pl.stage === MAX_STAGE).length : 0;
+      const stage = live ? demoPlants[demoPlants.length - 1].stage : 0;
       if (isWilted) {
         timelapsePhaseText.textContent = TIMELAPSE_PHASES.WILTED;
-      } else if (progressPercent < 20) {
-        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_1;
-      } else if (progressPercent < 50) {
-        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_2;
-      } else if (progressPercent < 80) {
-        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_3;
-      } else if (progressPercent < 95) {
-        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_4;
-      } else {
+      } else if (blooms >= 3) {
         timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_5;
+      } else if (blooms >= 1) {
+        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_4;
+      } else if (stage >= 2) {
+        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_3;
+      } else if (stage === 1) {
+        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_2;
+      } else {
+        timelapsePhaseText.textContent = TIMELAPSE_PHASES.PHASE_1;
       }
     }
 
@@ -307,29 +321,23 @@ function initLandingShowcase() {
   function applyProgress(progressFraction) {
     timelapseProgress = Math.max(0, Math.min(1.0, progressFraction));
 
-    if (timelapseProgress < 0.2) {
-      currentStage = 0;
-      isMultiGarden = false;
-    } else if (timelapseProgress < 0.5) {
-      currentStage = 1;
-      isMultiGarden = false;
-    } else if (timelapseProgress < 0.8) {
-      currentStage = 2;
-      isMultiGarden = false;
-    } else if (timelapseProgress < 0.95) {
-      currentStage = 3;
-      isMultiGarden = false;
-    } else {
-      currentStage = 4;
-      isMultiGarden = true;
-    }
+    const sessions = Math.floor(timelapseProgress * TIMELAPSE_SESSIONS + 1e-9);
+    let plants = [newSeed()];
+    for (let i = 0; i < sessions; i++) plants = growPlants(plants, 'demo');
+    demoPlants = plants;
 
-    const cycleFraction = (timelapseProgress * 5) % 1;
+    const blooms = plants.filter((p) => p.stage === MAX_STAGE).length;
+    const last = plants[plants.length - 1];
+    isMultiGarden = plants.length > 1;
+    // Stage 4 ("Full Garden") only once three plants have actually bloomed.
+    currentStage = blooms >= 3 ? 4 : last.stage;
+
+    const cycleFraction = (timelapseProgress * TIMELAPSE_SESSIONS) % 1;
     currentSeconds = Math.max(0, Math.round((1 - cycleFraction) * activeMinutes * 60));
     totalSeconds = activeMinutes * 60;
 
-    bloomsCount = Math.floor(timelapseProgress * 3);
-    workDoneCount = Math.floor(timelapseProgress * 5);
+    bloomsCount = blooms;
+    workDoneCount = sessions;
 
     syncUI();
   }
@@ -419,11 +427,11 @@ function initLandingShowcase() {
       if (stageIndex === 0) {
         resetToSeedRest();
       } else if (stageIndex === 1) {
-        applyProgress(0.25);
+        applyProgress(1 / TIMELAPSE_SESSIONS);
       } else if (stageIndex === 2) {
-        applyProgress(0.55);
+        applyProgress(2 / TIMELAPSE_SESSIONS);
       } else if (stageIndex === 3) {
-        applyProgress(0.85);
+        applyProgress(3 / TIMELAPSE_SESSIONS);
       } else if (stageIndex === 4) {
         applyProgress(1.0);
       }
@@ -443,6 +451,15 @@ function initLandingShowcase() {
   function startTimer() {
     if (isTimerRunning) return;
     pauseTimelapse();
+    if (timelapseProgress > 0) {
+      // Leaving timelapse mode: start the real focus timer from a fresh seed.
+      timelapseProgress = 0;
+      demoPlants = null;
+      isMultiGarden = false;
+      currentStage = 0;
+      currentSeconds = activeMinutes * 60;
+      totalSeconds = activeMinutes * 60;
+    }
     isTimerRunning = true;
     if (timerBtnText) timerBtnText.textContent = BUTTON_LABELS.PAUSE_FOCUS;
 
@@ -636,7 +653,20 @@ function initLandingShowcase() {
       drawSky(w, h, currentHour);
       drawGround(w, h, night);
 
-      if (isMultiGarden || currentStage === 4) {
+      if (timelapseProgress > 0 && demoPlants && demoPlants.length > 1) {
+        const slots = [
+          { xRatio: 0.25, scale: 0.8, seed: 12 },
+          { xRatio: 0.52, scale: 0.95, seed: 7 },
+          { xRatio: 0.78, scale: 0.75, seed: 23 },
+        ];
+        const shown = demoPlants.slice(-3);
+        shown.forEach((pl, i) => {
+          const sp = slots[i];
+          // "Test Wilt" always hits the plant being tended (the newest one).
+          const wilt = pl.wilted || (isWilted && i === shown.length - 1) ? 0.8 : 0;
+          drawSingleTree(w * sp.xRatio, h * 0.9, pl.stage, wilt, sp.seed, now, sp.scale);
+        });
+      } else if (isMultiGarden || currentStage === 4) {
         const specimens = [
           { stage: 3, wilt: 0, seed: 12, xRatio: 0.25, scale: 0.8 },
           {

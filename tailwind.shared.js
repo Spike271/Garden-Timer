@@ -1,3 +1,4 @@
+// Tokens that were identical in the landing page and the app configs.
 export const colors = {
   'surface-dim': '#d4dcd3',
   'outline-variant': '#c2c9bb',
