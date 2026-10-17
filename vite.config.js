@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react';
 import { resolve } from 'path';
 
 export default defineConfig({
-  // Set BASE_PATH=/<repo-name>/ when building for GitHub Pages. Defaults to '/' locally.
   base: process.env.BASE_PATH || '/',
   plugins: [
     react(),

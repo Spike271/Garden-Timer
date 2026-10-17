@@ -27,7 +27,8 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 ## Features
 
 - **Pomodoro cycle** — focus, short break, focus, … with a long break after every 4th completed focus session.
-- **Editable focus length** — presets of 25, 45 and 50 minutes, plus a ±5 minute stepper (1–180 min). Saved locally and applied from the next session.
+- **Editable lengths** — focus presets of 25, 45 and 50 minutes, plus a ±5 minute stepper (1–180 min). Short break (1–60 min) and long break (1–120 min) have ±1 minute steppers. Saved locally and applied from the next session.
+- **Survives reloads** — a running session is restored after a refresh or closed tab, with the correct time left.
 - **Procedural plant** — a recursive branch renderer draws four growth stages with a gentle idle sway. No sprite art.
 - **Wilt and recovery** — a forfeited focus session drops the plant one stage and wilts it. The next completed session heals it.
 - **A garden, not one plant** — after a healthy bloom, the next completed session plants a new seed beside it. Every plant stays on screen.
@@ -35,7 +36,7 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 - **Live weather** in the header (see [Network and privacy](#network-and-privacy)).
 - **Drift-proof timer** — it stores an absolute end time, so throttled background tabs can't skew the countdown.
 - **Landing page** with an interactive timelapse that runs a tree through a day.
-- **Honest stats** — sessions completed, blooms grown today, and focus hours. All start at zero.
+- **Honest stats** — sessions completed, blooms grown today, and focus hours. All start at zero. Focus hours are banked from the real length of each completed session, so changing the length later never rewrites history.
 - **Local-only** — no accounts and no backend. Your garden lives in `localStorage`.
 
 ## Technologies Used
@@ -89,8 +90,8 @@ Stages in order: **seed → sprout → sapling → bloom**.
 | Phase       | Default length                                  | Editable in the UI |
 | ----------- | ----------------------------------------------- | ------------------ |
 | Focus       | 25 min                                          | Yes (1–180 min)    |
-| Short break | 5 min                                           | No                 |
-| Long break  | 15 min, after every 4th completed focus session | No                 |
+| Short break | 5 min                                           | Yes (1–60 min)     |
+| Long break  | 15 min, after every 4th completed focus session | Yes (1–120 min)    |
 
 Forfeited sessions do not count toward the long-break cycle.
 
@@ -107,13 +108,14 @@ The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon an
 
 ### What is saved
 
-| `localStorage` key      | Contents                                                                |
-| ----------------------- | ----------------------------------------------------------------------- |
-| `garden-timer:garden`   | Every plant: stage, wilt state, and the day it last reached full bloom. |
-| `garden-timer:presets`  | Focus and break lengths.                                                |
-| `garden-timer:workDone` | Completed focus sessions.                                               |
-| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                              |
-| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load.         |
+| `localStorage` key      | Contents                                                                 |
+| ----------------------- | ------------------------------------------------------------------------ |
+| `garden-timer:garden`   | Every plant: stage, wilt state, and the day it last reached full bloom.  |
+| `garden-timer:presets`  | Focus and break lengths.                                                 |
+| `garden-timer:timer`    | Timer state: phase, absolute end time, sessions done, banked focus time. |
+| `garden-timer:workDone` | Legacy session count, migrated automatically (focus hours estimated).    |
+| `garden-timer:weather`  | Cached weather reading (about 25 minutes).                               |
+| `garden-timer:plant`    | Legacy single-plant save, migrated automatically on first load.          |
 
 ## Network and privacy
 
@@ -122,12 +124,20 @@ There is no backend, analytics or account system. Two things do leave your brows
 - **Weather.** The header reading uses the IP-based location from [GeoJS](https://get.geojs.io) to get approximate coordinates. If that fails, the browser asks for location permission instead. The coordinates are then sent to [Open-Meteo](https://open-meteo.com) for temperature, humidity and conditions. The result is cached locally.
 - **Third-party assets.** Google Fonts and the three gallery illustrations load from their own servers on page load. No third-party scripts run in your browser.
 
+## Reload behaviour
+
+The running timer is saved on start, skip and completion. On reload:
+
+- **Still running:** it resumes with the correct time left.
+- **Ended while you were away, by less than one session length:** it completes normally and the plant grows.
+- **Ended while you were away, by more than one session length:** it is treated as abandoned. No growth, no wilt, and the timer returns to an idle focus phase. Closing the tab for days is not a free bloom.
+- **Upgrading from an older save:** the old session count is kept. Focus hours for those sessions are estimated using your current focus length, one time only. Everything after that is exact.
+
 ## Known limitations
 
-- The running timer is not persisted across reloads.
-- **Focus Hours** is completed sessions multiplied by the current focus length, so changing the length also changes past hours.
 - **Blooms Today** counts healthy blooms that reached full bloom on today's local date. Plants saved before bloom dates existed are never counted as today's.
-- Short and long break lengths are stored with the presets but have no editing UI yet.
+- Two tabs open at once share one `localStorage` save and the last write wins. Use one tab.
+- Changing a length applies from the next session. A running session keeps its original length.
 
 ## Prerequisites
 
@@ -164,14 +174,15 @@ There is no backend, analytics or account system. Two things do leave your brows
 
 ### Scripts
 
-| Script                 | Description                               |
-| ---------------------- | ----------------------------------------- |
-| `npm run dev`          | Dev server with HMR.                      |
-| `npm run build`        | Production build of both pages.           |
-| `npm run preview`      | Serves the production build locally.      |
-| `npm run lint`         | Runs Oxlint.                              |
-| `npm run format`       | Formats the code with Oxfmt.              |
-| `npm run format:check` | Checks formatting without changing files. |
+| Script                 | Description                                                     |
+| ---------------------- | --------------------------------------------------------------- |
+| `npm run dev`          | Dev server with HMR.                                            |
+| `npm run build`        | Production build of both pages.                                 |
+| `npm run preview`      | Serves the production build locally.                            |
+| `npm test`             | Runs the Vitest suite (reducer, storage, settings, components). |
+| `npm run lint`         | Runs Oxlint.                                                    |
+| `npm run format`       | Formats the code with Oxfmt.                                    |
+| `npm run format:check` | Checks formatting without changing files.                       |
 
 ## Acknowledgements
 

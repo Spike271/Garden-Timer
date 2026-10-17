@@ -2,7 +2,6 @@ import forms from '@tailwindcss/forms';
 import containerQueries from '@tailwindcss/container-queries';
 import { borderRadius, colors } from './tailwind.shared.js';
 
-// Generated from the inline tailwind.config that used to live in the page's <head> (Play CDN).
 export default {
   darkMode: 'class',
   content: ['./index.html', './app.html', './src/**/*.{js,jsx}'],

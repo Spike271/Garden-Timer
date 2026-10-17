@@ -1,33 +1,32 @@
 import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useInterval } from './useInterval';
-import { initialTimer, timerReducer } from '../state/pomodoroReducer';
+import { timerReducer } from '../state/pomodoroReducer';
+import { loadTimer, saveTimer } from '../state/timerStorage';
 import { PHASES } from '../state/constants';
-import { STORAGE_KEYS } from '../config';
 
 const TICK_MS = 250;
 
-function getInitialTimer() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEYS.WORK_DONE);
-    if (raw) {
-      const n = parseInt(raw, 10);
-      if (!isNaN(n)) return { ...initialTimer, workDone: n };
-    }
-  } catch {}
-  return initialTimer;
-}
-
 // durations: { work, shortBreak, longBreak } in ms. Callbacks keep this hook plant-agnostic.
 export function usePomodoro({ durations, onWorkComplete, onWorkSkip }) {
-  const [state, dispatch] = useReducer(timerReducer, undefined, getInitialTimer);
+  const [state, dispatch] = useReducer(timerReducer, durations[PHASES.WORK], (legacyWorkMs) =>
+    loadTimer({ storage: localStorage, now: Date.now(), legacyWorkMs }),
+  );
   const [now, setNow] = useState(() => Date.now());
   const running = state.endAt !== null;
 
+  // Persist on state transitions only (start/skip/complete), never per tick.
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.WORK_DONE, state.workDone.toString());
-    } catch {}
-  }, [state.workDone]);
+    saveTimer(localStorage, state);
+  }, [state]);
+
+  // Background tabs throttle timers; resync the display the moment the tab is visible.
+  useEffect(() => {
+    const resync = () => {
+      if (document.visibilityState === 'visible') setNow(Date.now());
+    };
+    document.addEventListener('visibilitychange', resync);
+    return () => document.removeEventListener('visibilitychange', resync);
+  }, []);
 
   useInterval(
     () => {
@@ -57,6 +56,7 @@ export function usePomodoro({ durations, onWorkComplete, onWorkSkip }) {
   return {
     phase: state.phase,
     workDone: state.workDone,
+    focusMs: state.focusMs,
     running,
     remainingMs,
     progress,

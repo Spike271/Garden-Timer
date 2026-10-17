@@ -5,6 +5,8 @@ export const initialTimer = Object.freeze({
   endAt: null,
   totalMs: 0,
   workDone: 0,
+  // Real focused time banked from completed sessions. Immune to later length changes.
+  focusMs: 0,
 });
 
 export function nextPhaseAfterWork(workDone) {
@@ -15,13 +17,20 @@ export function timerReducer(state, action) {
   switch (action.type) {
     case 'start':
       assertPhase(state.phase);
+      if (state.endAt !== null) return state; // already running
       return { ...state, endAt: action.now + action.durationMs, totalMs: action.durationMs };
 
     case 'complete': {
       assertPhase(state.phase);
       if (state.phase === PHASES.WORK) {
         const workDone = state.workDone + 1;
-        return { phase: nextPhaseAfterWork(workDone), endAt: null, totalMs: 0, workDone };
+        return {
+          phase: nextPhaseAfterWork(workDone),
+          endAt: null,
+          totalMs: 0,
+          workDone,
+          focusMs: state.focusMs + state.totalMs,
+        };
       }
       return { ...state, phase: PHASES.WORK, endAt: null, totalMs: 0 };
     }
