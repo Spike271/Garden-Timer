@@ -4,6 +4,7 @@ import { MAX_STAGE } from './state/constants';
 import {
   drawSky as drawSharedSky,
   drawGround as drawSharedGround,
+  drawScene as drawSharedScene,
   isNightSky,
 } from './canvas/drawPlant';
 
@@ -203,10 +204,10 @@ function initLandingShowcase() {
     if (statBlooms) statBlooms.textContent = bloomsCount.toString();
     if (statHours) {
       const hrs = ((workDoneCount * activeMinutes) / 60).toFixed(1);
-      statHours.innerHTML = `${hrs} <span class="text-[11px] font-sans text-on-surface-variant font-normal">${TELEMETRY.HOURS_UNIT}</span>`;
+      statHours.innerHTML = `${hrs} <span class="text-xs font-sans text-on-surface-variant font-normal">${TELEMETRY.HOURS_UNIT}</span>`;
     }
     if (statStreak) {
-      statStreak.innerHTML = `${Math.max(0, workDoneCount)} <span class="text-[11px] font-sans text-on-surface-variant font-normal">${workDoneCount === 1 ? TELEMETRY.SESSION_UNIT : TELEMETRY.SESSIONS_UNIT}</span>`;
+      statStreak.innerHTML = `${Math.max(0, workDoneCount)} <span class="text-xs font-sans text-on-surface-variant font-normal">${workDoneCount === 1 ? TELEMETRY.SESSION_UNIT : TELEMETRY.SESSIONS_UNIT}</span>`;
     }
 
     if (sessionDot && sessionText) {
@@ -226,18 +227,34 @@ function initLandingShowcase() {
       const dot = btn.querySelector('span:first-child');
       const label = btn.querySelector('span:last-child');
       const isSelected = i === currentStage;
+      btn.setAttribute('aria-pressed', String(isSelected));
 
       if (isSelected) {
-        btn.className = `stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold ${isWilted ? 'bg-error-container text-error border border-error/50' : 'bg-secondary-container text-on-secondary-fixed-variant'} transition-all cursor-pointer`;
+        btn.className = `stage-nav-btn inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs font-semibold ${isWilted ? 'bg-error-container text-error border border-error/50' : 'bg-secondary-container text-on-secondary-fixed-variant'} transition-all cursor-pointer`;
         if (dot) dot.className = `w-1.5 h-1.5 rounded-full ${isWilted ? 'bg-error' : 'bg-primary'}`;
         if (label) label.textContent = TELEMETRY.formatStageBadge(i, STAGE_NAMES[i], true);
       } else {
         btn.className =
-          'stage-nav-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs text-on-surface-variant/70 hover:text-on-surface transition-all cursor-pointer';
+          'stage-nav-btn inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs text-on-surface-variant hover:text-on-surface transition-all cursor-pointer';
         if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-outline-variant';
         if (label) label.textContent = TELEMETRY.formatStageBadge(i, STAGE_NAMES[i], false);
       }
     });
+
+    // Assistive tech: canvas state label and a polite status that changes only on phase/length changes.
+    if (canvas) {
+      const names = STAGE_NAMES;
+      const plantsNow = timelapseProgress > 0 && demoPlants ? demoPlants.length : 1;
+      canvas.setAttribute(
+        'aria-label',
+        `Showcase garden: ${plantsNow} ${plantsNow === 1 ? 'plant' : 'plants'}. Current stage: ${names[Math.min(currentStage, names.length - 1)]}${isWilted ? ', wilted' : ''}.`,
+      );
+    }
+    const srStatus = document.getElementById('sr-status');
+    if (srStatus) {
+      const text = `Deep Focus ${activeMinutes} minutes, ${isTimerRunning ? 'running' : 'ready'}`;
+      if (srStatus.textContent !== text) srStatus.textContent = text;
+    }
 
     if (timelapseScrubber) timelapseScrubber.value = Math.round(timelapseProgress * 100);
     if (timelapsePercent) timelapsePercent.textContent = `${Math.round(timelapseProgress * 100)}%`;
@@ -264,24 +281,25 @@ function initLandingShowcase() {
     if (stepperVal) stepperVal.textContent = `${activeMinutes}${TELEMETRY.MINUTES_SUFFIX}`;
     presetButtons.forEach((presetBtn) => {
       const presetMinutes = parseInt(presetBtn.getAttribute('data-time'), 10);
+      presetBtn.setAttribute('aria-pressed', String(presetMinutes === activeMinutes));
       if (presetMinutes === activeMinutes) {
         presetBtn.className =
-          'flex-1 py-1.5 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-primary bg-secondary-container text-on-secondary-fixed-variant font-semibold shadow-xs';
+          'flex-1 min-h-8 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-primary bg-secondary-container text-on-secondary-fixed-variant font-semibold shadow-xs';
       } else {
         presetBtn.className =
-          'flex-1 py-1.5 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-outline-variant/60 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium';
+          'flex-1 min-h-8 text-center rounded-full border text-xs transition-all cursor-pointer preset-btn border-outline-variant/60 bg-surface-container-low hover:bg-surface-container text-on-surface-variant font-medium';
       }
     });
 
     if (primaryTimelapseBtn) {
       if (isTimelapseRunning) {
         primaryTimelapseBtn.className =
-          'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-tertiary hover:bg-tertiary-container text-on-tertiary shadow-xs transition-all cursor-pointer active:scale-95 animate-pulse';
+          'inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs font-semibold bg-tertiary hover:bg-tertiary-container text-on-tertiary shadow-xs transition-all cursor-pointer active:scale-95 animate-pulse';
         if (timelapseBtnIcon) timelapseBtnIcon.textContent = 'pause';
         if (timelapseBtnText) timelapseBtnText.textContent = BUTTON_LABELS.PAUSE_TIMELAPSE;
       } else {
         primaryTimelapseBtn.className =
-          'inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-primary hover:bg-surface-tint text-on-primary shadow-xs transition-all cursor-pointer active:scale-95';
+          'inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs font-semibold bg-primary hover:bg-surface-tint text-on-primary shadow-xs transition-all cursor-pointer active:scale-95';
         if (timelapseBtnIcon) timelapseBtnIcon.textContent = 'fast_forward';
         if (timelapseBtnText) {
           timelapseBtnText.textContent =
@@ -301,17 +319,17 @@ function initLandingShowcase() {
       toggleWiltBtn.disabled = isTimelapseRunning;
       if (isTimelapseRunning) {
         toggleWiltBtn.className =
-          'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] text-on-surface-variant/40 bg-surface-container/50 border border-outline-variant/30 font-medium transition-all cursor-not-allowed opacity-50';
+          'inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs text-on-surface-variant/40 bg-surface-container/50 border border-outline-variant/30 font-medium transition-all cursor-not-allowed opacity-50';
         toggleWiltBtn.title = TOOLTIPS.WILT_DISABLED;
         if (wiltBtnText) wiltBtnText.textContent = BUTTON_LABELS.TEST_WILT;
       } else if (isWilted) {
         toggleWiltBtn.className =
-          'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] text-error bg-error-container/40 hover:bg-error-container/60 border border-error/50 font-medium transition-all cursor-pointer';
+          'inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs text-error bg-error-container/40 hover:bg-error-container/60 border border-error/50 font-medium transition-all cursor-pointer';
         toggleWiltBtn.title = TOOLTIPS.HEAL_WILT;
         if (wiltBtnText) wiltBtnText.textContent = BUTTON_LABELS.HEAL_WILT;
       } else {
         toggleWiltBtn.className =
-          'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] text-tertiary bg-tertiary-fixed/30 hover:bg-tertiary-fixed/50 border border-tertiary-fixed/60 font-medium transition-all cursor-pointer';
+          'inline-flex items-center gap-1.5 px-2.5 min-h-9 rounded-full text-xs text-tertiary bg-tertiary-fixed/30 hover:bg-tertiary-fixed/50 border border-tertiary-fixed/60 font-medium transition-all cursor-pointer';
         toggleWiltBtn.title = TOOLTIPS.TEST_WILT;
         if (wiltBtnText) wiltBtnText.textContent = BUTTON_LABELS.TEST_WILT;
       }
@@ -382,10 +400,12 @@ function initLandingShowcase() {
     speedBtn.addEventListener('click', () => {
       speedButtons.forEach((otherSpeedBtn) => {
         otherSpeedBtn.className =
-          'timelapse-speed-btn px-2 py-0.5 rounded text-[10px] font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer';
+          'timelapse-speed-btn px-2.5 min-h-9 min-w-9 rounded-full text-xs font-medium text-on-surface-variant hover:text-primary transition-colors cursor-pointer';
       });
+
       speedBtn.className =
-        'timelapse-speed-btn px-2 py-0.5 rounded text-[10px] font-semibold bg-secondary-container text-on-secondary-fixed-variant transition-colors cursor-pointer';
+        'timelapse-speed-btn px-2.5 min-h-9 min-w-9 rounded-full text-xs font-semibold bg-secondary-container text-on-secondary-fixed-variant transition-colors cursor-pointer';
+
       timelapseSpeed = parseInt(speedBtn.getAttribute('data-speed'), 10) || 15;
       syncUI();
     });
@@ -591,16 +611,21 @@ function initLandingShowcase() {
       ctx.translate(x, baseY);
       ctx.scale(scale, scale);
       if (stage === 0) {
-        ctx.fillStyle = wilt > 0.3 ? '#5a3d1f' : '#8b5a2b';
+        const glow = ctx.createRadialGradient(0, -8, 2, 0, -8, 36);
+        glow.addColorStop(0, `rgba(193, 239, 180, ${wilt > 0.3 ? 0 : 0.5})`);
+        glow.addColorStop(1, 'rgba(193, 239, 180, 0)');
+        ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.ellipse(0, -4, 6, 4, 0, 0, Math.PI * 2);
+        ctx.arc(0, -8, 36, 0, Math.PI * 2);
         ctx.fill();
-        if (wilt <= 0.3) {
-          ctx.fillStyle = '#6ab85e';
-          ctx.beginPath();
-          ctx.arc(2, -6, 2, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        ctx.fillStyle = wilt > 0.3 ? '#4a3220' : '#6b4423';
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 24, 8, 0, Math.PI, 0);
+        ctx.fill();
+        ctx.fillStyle = wilt > 0.3 ? '#7a5a35' : '#d19a4f';
+        ctx.beginPath();
+        ctx.ellipse(0, -9, 9, 6, -0.3, 0, Math.PI * 2);
+        ctx.fill();
       } else {
         branch({
           x: 0,
@@ -849,12 +874,55 @@ function initScrollspy() {
   window.addEventListener('load', onScroll);
 }
 
+// Hero garden: three full blooms under the live sky. Sways for 5s, then holds still (WCAG 2.2.2).
+function initHeroGarden() {
+  const el = document.getElementById('hero-canvas');
+  if (!el) return;
+  const ctx = el.getContext('2d');
+  const trio = [{ stage: 3 }, { stage: 3 }, { stage: 3 }];
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ANIMATE_MS = 5000;
+  let startedAt = null;
+
+  const render = (t) => {
+    if (startedAt === null) startedAt = t;
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = el.clientWidth;
+    const h = el.clientHeight;
+    if (el.width !== Math.round(w * dpr) || el.height !== Math.round(h * dpr)) {
+      el.width = Math.round(w * dpr);
+      el.height = Math.round(h * dpr);
+    }
+    // The shared scene is laid out for ~330px of height; scale it down to fit short canvases.
+    // Two trees on narrow screens so they don't crowd or clip.
+    const plants = w < 560 ? trio.slice(0, 2) : trio;
+    const k = Math.min(1, h / 330);
+    ctx.setTransform(dpr * k, 0, 0, dpr * k, 0, 0);
+    const now = new Date();
+    const hour = now.getHours() + now.getMinutes() / 60;
+    drawSharedScene(ctx, {
+      width: w / k,
+      height: h / k,
+      plants,
+      wilts: plants.map(() => 0),
+      popScale: 1,
+      timeMs: reduce ? 0 : Math.min(t - startedAt, ANIMATE_MS),
+      hour,
+    });
+    if (!reduce && t - startedAt < ANIMATE_MS) requestAnimationFrame(render);
+  };
+  requestAnimationFrame(render);
+  window.addEventListener('resize', () => requestAnimationFrame(render));
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     initLandingShowcase();
     initScrollspy();
+    initHeroGarden();
   });
 } else {
   initLandingShowcase();
   initScrollspy();
+  initHeroGarden();
 }

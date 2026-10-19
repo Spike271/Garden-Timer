@@ -35,10 +35,14 @@ export default function TimerDial({ phase, progress, remainingMs, stage }) {
       </svg>
 
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
-        <span className="text-[11px] tracking-[0.2em] uppercase text-secondary font-semibold mb-0.5">
+        <span className="text-xs tracking-[0.2em] uppercase text-secondary font-semibold mb-0.5">
           {PHASE_LABELS[phase]}
         </span>
-        <div className="font-serif text-5xl sm:text-6xl text-on-surface font-light tracking-tight leading-none my-1 font-variant-numeric tabular-nums">
+        <div
+          role="timer"
+          aria-label={`${PHASE_LABELS[phase]} time remaining`}
+          className="font-serif text-5xl sm:text-6xl text-on-surface font-light tracking-tight leading-none my-1 font-variant-numeric tabular-nums"
+        >
           {formatTime(remainingMs)}
         </div>
         <span className="text-xs text-on-surface-variant font-medium mt-1">

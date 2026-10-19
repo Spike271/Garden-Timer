@@ -1,25 +1,24 @@
 import { APP_STRINGS } from '../config';
-import DaylightIcon from './DaylightIcon';
 
-const { CIRCADIAN, SPECIMEN } = APP_STRINGS;
+const { SPECIMEN } = APP_STRINGS;
 const STAGE_NAMES = SPECIMEN.STAGE_NAMES;
 
-export default function SpecimenHeader({ plantCount, active, isDaylight }) {
+export default function SpecimenHeader({ plantCount, active }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-outline-variant/30">
       <div>
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-semibold text-primary tracking-widest uppercase">
+          <span className="text-xs font-semibold text-primary tracking-widest uppercase">
             {SPECIMEN.formatNumber(plantCount)}
           </span>
           <span className="w-1 h-1 rounded-full bg-outline-variant"></span>
-          <span className="text-[10px] font-medium text-on-surface-variant">
+          <span className="text-xs font-medium text-on-surface-variant">
             {SPECIMEN.formatGarden(plantCount)}
           </span>
         </div>
-        <h3 className="font-serif text-xl sm:text-2xl text-on-surface mt-0.5 mb-0 font-normal">
+        <h2 className="font-serif text-xl sm:text-2xl text-on-surface mt-0.5 mb-0 font-normal">
           {SPECIMEN.TREE_NAME}
-        </h3>
+        </h2>
       </div>
 
       <div className="flex items-center gap-3 bg-surface px-3 py-1.5 rounded-lg border border-outline-variant/40 self-start sm:self-auto text-xs">
@@ -31,13 +30,6 @@ export default function SpecimenHeader({ plantCount, active, isDaylight }) {
             {active.wilted
               ? SPECIMEN.GROWTH_WILTED
               : SPECIMEN.formatGrowth(active.stage, STAGE_NAMES.length)}
-          </span>
-        </div>
-        <span className="w-px h-3.5 bg-outline-variant/60"></span>
-        <div className="flex items-center gap-1.5">
-          <DaylightIcon isDaylight={isDaylight} />
-          <span className="font-semibold text-on-surface">
-            {isDaylight ? CIRCADIAN.FILTERED_SUN : CIRCADIAN.NIGHT_REST}
           </span>
         </div>
       </div>

@@ -3,12 +3,13 @@ import { clampFocus, clampMinutes, sanitizePresets } from '../state/SettingsCont
 
 describe('clampMinutes', () => {
   it('clamps each preset to its own range', () => {
-    expect(clampMinutes('shortBreakMinutes', 999)).toBe(60);
-    expect(clampMinutes('longBreakMinutes', 999)).toBe(120);
+    expect(clampMinutes('shortBreakMinutes', 999)).toBe(15);
+    expect(clampMinutes('longBreakMinutes', 999)).toBe(60);
     expect(clampMinutes('focusMinutes', 999)).toBe(180);
     expect(clampMinutes('shortBreakMinutes', 0)).toBe(1); // sticks at the floor, no wrap
+    expect(clampMinutes('longBreakMinutes', 0)).toBe(15); // sticks at the floor, no wrap
     expect(clampMinutes('shortBreakMinutes', 'abc')).toBe(5); // garbage -> default
-    expect(clampMinutes('longBreakMinutes', '12')).toBe(12);
+    expect(clampMinutes('longBreakMinutes', '20')).toBe(20);
   });
 
   it('clampFocus stays compatible', () => {
@@ -30,6 +31,6 @@ describe('sanitizePresets', () => {
 
   it('repairs corrupt break values that used to yield NaN durations', () => {
     const p = sanitizePresets({ focusMinutes: 30, shortBreakMinutes: 'x', longBreakMinutes: 9999 });
-    expect(p).toEqual({ focusMinutes: 30, shortBreakMinutes: 5, longBreakMinutes: 120 });
+    expect(p).toEqual({ focusMinutes: 30, shortBreakMinutes: 5, longBreakMinutes: 60 });
   });
 });

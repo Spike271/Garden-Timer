@@ -2,3 +2,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Visible keyboard focus everywhere (WCAG 2.4.7). Wins over component outline resets. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #376430 !important;
+  outline-offset: 2px !important;
+  border-radius: 6px;
+  /* Don't fade the ring in: transition-all would leave it at 0px for the first 200ms. */
+  transition-property:
+    color, background-color, border-color, opacity, box-shadow, transform !important;
+}
+
+/* Self-hosted icon font (subset of Material Symbols Outlined). Blocks text rendering until loaded so icon
+   names never flash as words. FILL axis kept for the filled variants. */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url('/MaterialSymbolsOutlined-subset.woff2') format('woff2');
+}

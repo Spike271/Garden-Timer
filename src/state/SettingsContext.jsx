@@ -6,8 +6,8 @@ const DEFAULTS = Object.freeze({ focusMinutes: 25, shortBreakMinutes: 5, longBre
 // [min, max] minutes per preset.
 export const LIMITS = Object.freeze({
   focusMinutes: Object.freeze([5, 180]),
-  shortBreakMinutes: Object.freeze([1, 60]),
-  longBreakMinutes: Object.freeze([1, 120]),
+  shortBreakMinutes: Object.freeze([1, 15]),
+  longBreakMinutes: Object.freeze([15, 60]),
 });
 export const FOCUS_MIN = LIMITS.focusMinutes[0];
 export const FOCUS_MAX = LIMITS.focusMinutes[1];

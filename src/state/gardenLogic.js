@@ -31,5 +31,7 @@ export function wiltPlants(list) {
 }
 
 export function countBloomsOn(list, dayKey) {
-  return list.filter((p) => p.stage === MAX_STAGE && !p.wilted && p.bloomedOn === dayKey).length;
+  return list.filter(
+    (p) => p.stage >= MAX_STAGE && !p.wilted && (!p.bloomedOn || p.bloomedOn === dayKey),
+  ).length;
 }

@@ -7,7 +7,6 @@ import { useWeather } from './hooks/useWeather';
 import PlantCanvas from './components/PlantCanvas';
 import AppHeader from './components/AppHeader';
 import Toast from './components/Toast';
-import Titlebar from './components/Titlebar';
 import StageRibbon from './components/StageRibbon';
 import CadenceControls from './components/CadenceControls';
 import TimerDial from './components/TimerDial';
@@ -26,6 +25,7 @@ export default function App() {
   const { plants, grow, wilt } = useGarden();
   const { presets } = useSettings();
   const [toast, setToast] = useState(null);
+  const [toastPaused, setToastPaused] = useState(false);
   const [intention, setIntention] = useState(CADENCE.DEFAULT_INTENTION);
   const { timeString, isDaylight } = useClock();
   const weather = useWeather();
@@ -59,11 +59,24 @@ export default function App() {
     document.body.dataset.phase = phase;
   }, [phase]);
 
+  // Toast stays while hovered/focused, closes on Escape, otherwise after 8s.
+  useEffect(() => {
+    if (!toast || toastPaused) return;
+    const id = setTimeout(() => setToast(null), 8000);
+    return () => clearTimeout(id);
+  }, [toast, toastPaused]);
+
   useEffect(() => {
     if (!toast) return;
-    const id = setTimeout(() => setToast(null), 4000);
-    return () => clearTimeout(id);
+    const onKey = (e) => {
+      if (e.key === 'Escape') setToast(null);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, [toast]);
+
+  // Announced only when the phase or running state changes, never per tick.
+  const statusText = `${PHASE_STRINGS.LABELS[phase]}: ${Math.round(durations[phase] / 60_000)} minutes, ${running ? 'running' : 'ready'}`;
 
   const active = plants[plants.length - 1];
   const blooms = countBloomsOn(plants, localDateKey());
@@ -71,6 +84,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col herbal-base text-on-surface antialiased">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-primary focus:text-on-primary focus:px-4 focus:py-2 focus:rounded-lg"
+      >
+        {BRAND.SKIP_LINK}
+      </a>
+      <output className="sr-only">{statusText}</output>
       <AppHeader
         phase={phase}
         running={running}
@@ -79,16 +99,20 @@ export default function App() {
         weather={weather}
       />
 
-      <Toast toast={toast} onDismiss={() => setToast(null)} />
+      <Toast
+        toast={toast}
+        onDismiss={() => setToast(null)}
+        onPause={() => setToastPaused(true)}
+        onResume={() => setToastPaused(false)}
+      />
 
-      <main className="flex-grow max-w-[1200px] mx-auto px-4 sm:px-6 py-6 sm:py-8 w-full">
+      <main
+        id="main"
+        tabIndex={-1}
+        className="flex-grow outline-none max-w-[1200px] mx-auto px-4 sm:px-6 py-6 sm:py-8 w-full"
+      >
+        <h1 className="sr-only">{BRAND.NAME}</h1>
         <div className="pressed-paper-card border border-outline-variant/60 rounded-2xl overflow-hidden shadow-md">
-          <Titlebar
-            phase={phase}
-            running={running}
-            isDaylight={isDaylight}
-            timeString={timeString}
-          />
           <StageRibbon active={active} />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[480px]">
@@ -97,19 +121,22 @@ export default function App() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-[18px]">
+                    <span
+                      aria-hidden="true"
+                      className="material-symbols-outlined text-primary text-[18px]"
+                    >
                       schedule
                     </span>
                     <span className="text-xs font-semibold text-on-surface tracking-wider uppercase">
                       {CADENCE.TITLE}
                     </span>
                   </div>
-                  <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-secondary bg-surface-container px-2.5 py-0.5 rounded-full border border-outline-variant/30">
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-secondary bg-surface-container px-2.5 py-0.5 rounded-full border border-outline-variant/30">
                     {PHASE_STRINGS.formatSessionProgress(sessionInCycle)}
                   </span>
                 </div>
 
-                <CadenceControls />
+                <CadenceControls running={running} />
                 <TimerDial
                   phase={phase}
                   progress={progress}
@@ -130,7 +157,7 @@ export default function App() {
 
             {/* RIGHT PANE: BOTANICAL TERRARIUM */}
             <section className="lg:col-span-7 bg-surface-container-low p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden">
-              <SpecimenHeader plantCount={plants.length} active={active} isDaylight={isDaylight} />
+              <SpecimenHeader plantCount={plants.length} active={active} />
 
               <div className="relative w-full rounded-xl overflow-hidden border border-outline-variant/50 shadow-inner my-4 select-none">
                 <div className="w-full h-[280px] sm:h-[320px] relative">
@@ -138,7 +165,7 @@ export default function App() {
                 </div>
               </div>
 
-              <StatsGrid active={active} blooms={blooms} focusMs={focusMs} workDone={workDone} />
+              <StatsGrid blooms={blooms} focusMs={focusMs} workDone={workDone} />
             </section>
           </div>
         </div>

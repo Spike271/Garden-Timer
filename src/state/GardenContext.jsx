@@ -15,7 +15,14 @@ function loadPlants() {
     const legacy = localStorage.getItem(STORAGE_KEYS.LEGACY_PLANT);
     if (legacy) {
       const old = JSON.parse(legacy);
-      return [{ stage: Math.min(MAX_STAGE, old.stage ?? 0), wilted: !!old.wilted }];
+      const stage = Math.min(MAX_STAGE, old.stage ?? 0);
+      return [
+        {
+          stage,
+          wilted: !!old.wilted,
+          ...(stage >= MAX_STAGE && !old.wilted ? { bloomedOn: localDateKey() } : {}),
+        },
+      ];
     }
   } catch {}
   return [newSeed()];

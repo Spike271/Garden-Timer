@@ -2,10 +2,16 @@ import { APP_STRINGS } from '../config';
 
 const { NOTIFICATIONS } = APP_STRINGS;
 
-export default function Toast({ toast, onDismiss }) {
+export default function Toast({ toast, onDismiss, onPause, onResume }) {
   if (!toast) return null;
   return (
-    <div className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-4 w-full toast-botanical">
+    <div
+      className="max-w-[1200px] mx-auto px-4 sm:px-6 pt-4 w-full toast-botanical"
+      onMouseEnter={onPause}
+      onMouseLeave={onResume}
+      onFocus={onPause}
+      onBlur={onResume}
+    >
       <output
         className={`flex items-center justify-between px-5 py-3 rounded-xl border shadow-sm transition-all duration-300 ${
           toast.type === 'warning'
@@ -15,6 +21,7 @@ export default function Toast({ toast, onDismiss }) {
       >
         <div className="flex items-center gap-3">
           <span
+            aria-hidden="true"
             className={`material-symbols-outlined text-[20px] ${
               toast.type === 'warning' ? 'text-error' : 'text-primary'
             }`}
@@ -37,10 +44,12 @@ export default function Toast({ toast, onDismiss }) {
         <button
           type="button"
           aria-label={NOTIFICATIONS.DISMISS_ARIA}
-          className="text-on-surface-variant hover:text-on-surface p-1 rounded-full transition-colors bg-transparent border-0 cursor-pointer"
+          className="text-on-surface-variant hover:text-on-surface min-w-11 min-h-11 flex items-center justify-center rounded-full transition-colors bg-transparent border-0 cursor-pointer"
           onClick={() => onDismiss()}
         >
-          <span className="material-symbols-outlined text-[18px]">close</span>
+          <span aria-hidden="true" className="material-symbols-outlined text-[18px]">
+            close
+          </span>
         </button>
       </output>
     </div>

@@ -26,7 +26,7 @@ export default function Titlebar({ phase, running, isDaylight, timeString }) {
 
       {/* Right: Active Session Telemetry */}
       <div className="flex items-center gap-3">
-        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed-variant text-[11px] font-semibold">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-fixed-variant text-xs font-semibold">
           <span
             className={`w-1.5 h-1.5 rounded-full ${running ? 'bg-primary animate-pulse' : 'bg-primary'}`}
           ></span>

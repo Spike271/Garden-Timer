@@ -2,7 +2,7 @@ import forms from '@tailwindcss/forms';
 import containerQueries from '@tailwindcss/container-queries';
 import { borderRadius, colors } from './tailwind.shared.js';
 
-// Generated from the inline tailwind.config that used to live in the page's <head> (Play CDN).
+// Generated from the inline tailwind.config that used to live in the page's <head>.
 export default {
   darkMode: 'class',
   content: ['./index.html', './app.html', './src/**/*.{js,jsx}'],
@@ -23,6 +23,7 @@ export default {
         margin: '2.5rem',
       },
       fontFamily: {
+        'font-timer-display': ['Newsreader', 'serif'],
         'headline-sm': ['Newsreader', 'serif'],
         'timer-display-mobile': ['Newsreader', 'serif'],
         'display-hero': ['Newsreader', 'serif'],
@@ -116,7 +117,7 @@ export default {
           },
         ],
         'label-sm': [
-          '11px',
+          '12px',
           {
             lineHeight: '14px',
             letterSpacing: '0.08em',

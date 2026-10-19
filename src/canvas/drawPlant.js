@@ -190,9 +190,21 @@ function drawPlant(ctx, o) {
   ctx.scale(o.scale, o.scale);
 
   if (o.stage === 0) {
-    ctx.fillStyle = lerpColor('#8b5a2b', '#5a3d1f', o.wilt);
+    // Glow + soil mound so a fresh seed is findable against the dark ground.
+    const glow = ctx.createRadialGradient(0, -8, 2, 0, -8, 36);
+    glow.addColorStop(0, `rgba(193, 239, 180, ${0.5 * (1 - o.wilt)})`);
+    glow.addColorStop(1, 'rgba(193, 239, 180, 0)');
+    ctx.fillStyle = glow;
     ctx.beginPath();
-    ctx.ellipse(0, -4, 6, 4, 0, 0, Math.PI * 2);
+    ctx.arc(0, -8, 36, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = lerpColor('#6b4423', '#4a3220', o.wilt);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 24, 8, 0, Math.PI, 0);
+    ctx.fill();
+    ctx.fillStyle = lerpColor('#d19a4f', '#7a5a35', o.wilt);
+    ctx.beginPath();
+    ctx.ellipse(0, -9, 9, 6, -0.3, 0, Math.PI * 2);
     ctx.fill();
   } else {
     branch(ctx, {

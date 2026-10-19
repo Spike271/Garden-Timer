@@ -10,7 +10,7 @@ const LOGO_SRC = `${import.meta.env.BASE_URL}favicon.jpg`;
 export default function AppHeader({ phase, running, isDaylight, timeString, weather }) {
   return (
     <header className="bg-surface/90 backdrop-blur-md border-b border-outline-variant/40 sticky top-0 z-50">
-      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6 min-h-20 flex items-center justify-between gap-2">
         {/* Brand Identity */}
         <div className="flex items-center gap-4 sm:gap-5">
           <div className="flex items-center gap-3">
@@ -18,10 +18,12 @@ export default function AppHeader({ phase, running, isDaylight, timeString, weat
               <img src={LOGO_SRC} alt={BRAND.LOGO_ALT} className="w-full h-full object-cover" />
             </div>
             <div>
-              <span className="font-serif text-xl sm:text-2xl text-primary tracking-tight font-medium flex items-center gap-1.5">
+              <span className="font-serif text-xl sm:text-2xl text-primary tracking-tight font-medium flex items-center gap-1.5 whitespace-nowrap">
                 {BRAND.NAME}
               </span>
-              <p className="text-xs text-on-surface-variant font-medium m-0">{BRAND.TAGLINE}</p>
+              <p className="hidden sm:block text-xs text-on-surface-variant font-medium m-0">
+                {BRAND.TAGLINE}
+              </p>
             </div>
           </div>
         </div>
@@ -44,7 +46,7 @@ export default function AppHeader({ phase, running, isDaylight, timeString, weat
 
         {/* Session State Badge & Return CTA */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container border border-outline-variant/50 text-xs font-semibold text-on-secondary-fixed-variant">
+          <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container border border-outline-variant/50 text-xs font-semibold text-on-secondary-fixed-variant whitespace-nowrap">
             <span
               className={`w-2 h-2 rounded-full ${
                 phase === PHASES.WORK
@@ -63,7 +65,7 @@ export default function AppHeader({ phase, running, isDaylight, timeString, weat
 
           <a
             href="index.html"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors border border-outline-variant/40"
+            className="inline-flex items-center gap-1.5 px-3 min-h-11 rounded-full text-xs font-semibold text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors border border-outline-variant/40"
             title={BRAND.RETURN_CTA_TITLE}
           >
             <svg
@@ -78,7 +80,7 @@ export default function AppHeader({ phase, running, isDaylight, timeString, weat
               <line x1="19" y1="12" x2="5" y2="12" />
               <polyline points="12 19 5 12 12 5" />
             </svg>
-            <span>{BRAND.RETURN_CTA}</span>
+            <span className="max-[480px]:sr-only">{BRAND.RETURN_CTA}</span>
           </a>
         </div>
       </div>
