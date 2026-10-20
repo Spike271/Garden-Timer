@@ -1,16 +1,20 @@
-<p align="center">
-  <img src="public/favicon.jpg" alt="Garden Timer logo" width="96" />
-</p>
+<div align="center"> 
 
-<h1 align="center">Garden Timer</h1>
+<img src="public/favicon.jpg" alt="Garden Timer logo" width="96" /> 
 
-<p align="center"><em>A Pomodoro timer where your plant is the progress bar.</em></p>
+# Garden Timer 
+
+[![Deploy to GitHub Pages](https://github.com/Spike271/Garden-Timer/actions/workflows/deploy.yml/badge.svg)](https://github.com/Spike271/Garden-Timer/actions/workflows/deploy.yml) 
+
+<p align="center"><em>A Pomodoro timer where your plant is the progress bar.</em></p> 
+
+</div>
 
 ---
 
 ## About the Project
 
-Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish a focus session and your plant grows a stage, from seed to sprout to sapling to bloom. Forfeit one and it wilts. The sky behind the plant follows your local clock, with a sun by day, a moon and stars at night, and dawn and golden-hour light in between. The goal is a garden full of blooms, with no streak pressure and no alarms.
+Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish a focus session, and your plant grows a stage, from seed to sprout to sapling to bloom. Forfeit one and it wilts. The sky behind the plant follows your local clock, with a sun by day, a moon and stars at night, and dawn and golden-hour light in between. The goal is a garden full of blooms, with no streak pressure and no alarms.
 
 ## Screenshots
 
@@ -26,8 +30,8 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 
 ## Features
 
-- **Pomodoro cycle** — focus, short break, focus, … with a long break after every 4th completed focus session.
-- **Editable lengths** — focus presets of 25, 45 and 50 minutes, plus a ±5 minute stepper (5–180 min), hold to repeat. Short break (1–60 min) and long break (1–120 min) have ±1 minute steppers. Saved locally and applied from the next session.
+- **Pomodoro cycle** — focus, short break, focus, … with a long break after every fourth completed focus session.
+- **Editable lengths** — focus presets of 25, 45, and 50 minutes, plus a ±5 minute stepper (5–180 min), hold to repeat. Short break (1–60 min) and long break (1–120 min) have ±1 minute steppers. Saved locally and applied from the next session.
 - **Forfeit needs a second tap.** Abandoning a focus session takes two taps within 4 seconds (Escape cancels), so a stray tap can't wilt your plant. Break lengths and presets are locked while a session runs and apply to the next one.
 - **Survives reloads** — a running session is restored after a refresh or closed tab, with the correct time left.
 - **Procedural plant** — a recursive branch renderer draws four growth stages with a gentle idle sway. No sprite art.
@@ -54,9 +58,9 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 1. Open the [landing page](https://spike271.github.io/Garden-Timer/) and press a call-to-action button to enter the app.
 2. Pick a focus length with a preset or the stepper.
 3. Press **Start**. The ring fills as the session runs.
-4. Stay until the ring completes. Your plant grows one stage.
-5. A break starts next. Start it, or skip it.
-6. After the 4th completed focus session, the break is a long one.
+4. Stay until the ring completes. Your plant grows at one stage.
+5. A break starts next. Start it or skip it.
+6. After the fourth completed focus session, the break is long.
 
 > A running timer is not saved. Refreshing or closing the tab mid-session loses it, but it does not wilt the plant. Only an explicit forfeit does.
 
@@ -105,7 +109,7 @@ Forfeited sessions do not count toward the long-break cycle.
 | 17:00 – 20:00 | Golden hour: pink to orange to gold |
 | 20:00 – 05:00 | Night: navy sky, stars, darker soil |
 
-The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon and setting on the right. The **moon** takes the same arc from 18:00 to 06:00.
+The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon, and setting on the right. The **moon** takes the same arc from 18:00 to 06:00.
 
 ### What is saved
 
@@ -120,12 +124,12 @@ The **sun** is shown from 06:00 to 18:00, rising on the left, peaking at noon an
 
 ## Network and privacy
 
-There is no backend, analytics or account system. Two things do leave your browser:
+There is no backend, analytics, or account system. Two things do leave your browser:
 
-- **Weather.** The header reading uses the IP-based location from [GeoJS](https://get.geojs.io) to get approximate coordinates. If that fails, the browser asks for location permission instead. The coordinates are then sent to [Open-Meteo](https://open-meteo.com) for temperature, humidity and conditions. The result is cached locally.
+- **Weather.** The header reading uses the IP-based location from [GeoJS](https://get.geojs.io) to get approximate coordinates. If that fails, the browser asks for location permission instead. The coordinates are then sent to [Open-Meteo](https://open-meteo.com) for temperature, humidity, and conditions. The result is cached locally.
 - **Third-party assets.** Google Fonts and the three gallery illustrations load from their own servers on page load. No third-party scripts run in your browser.
 
-## Reload behaviour
+## Reload behavior
 
 The running timer is saved on start, skip and completion. On reload:
 
@@ -137,7 +141,7 @@ The running timer is saved on start, skip and completion. On reload:
 ## Known limitations
 
 - **Blooms Today** counts healthy blooms that reached full bloom on today's local date. Plants saved before bloom dates existed are never counted as today's.
-- Two tabs open at once share one `localStorage` save and the last write wins. Use one tab.
+- Two tabs open at once share one `localStorage` save and the last writing wins. Use one tab.
 - Changing a length applies from the next session. A running session keeps its original length.
 
 ## Accessibility
