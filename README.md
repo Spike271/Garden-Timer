@@ -1,14 +1,10 @@
-<div style="text-align: center;">
+<p align="center">
+  <img src="public/favicon.jpg" alt="Garden Timer logo" width="96" />
+</p>
 
-<img src="public/favicon.jpg" alt="Garden Timer logo" width="96" />
+<h1 align="center">Garden Timer</h1>
 
-# Garden Timer
-
-[![Deploy to GitHub Pages](https://github.com/Spike271/Garden-Timer/actions/workflows/deploy.yml/badge.svg)](https://github.com/Spike271/Garden-Timer/actions/workflows/deploy.yml)
-
-<p style="text-align: center;"><em>A Pomodoro timer where your plant is the progress bar.</em></p>
-
-</div>
+<p align="center"><em>A Pomodoro timer where your plant is the progress bar.</em></p>
 
 ---
 
@@ -60,7 +56,7 @@ Garden Timer turns the Pomodoro technique into a small botanical ritual. Finish 
 3. Press **Start**. The ring fills as the session runs.
 4. Stay until the ring completes. Your plant grows one stage.
 5. A break starts next. Start it, or skip it.
-6. After the fourth completed focus session, the break is long.
+6. After the 4th completed focus session, the break is a long one.
 
 > A running timer is not saved. Refreshing or closing the tab mid-session loses it, but it does not wilt the plant. Only an explicit forfeit does.
 
@@ -129,7 +125,7 @@ There is no backend, analytics or account system. Two things do leave your brows
 - **Weather.** The header reading uses the IP-based location from [GeoJS](https://get.geojs.io) to get approximate coordinates. If that fails, the browser asks for location permission instead. The coordinates are then sent to [Open-Meteo](https://open-meteo.com) for temperature, humidity and conditions. The result is cached locally.
 - **Third-party assets.** Google Fonts and the three gallery illustrations load from their own servers on page load. No third-party scripts run in your browser.
 
-## Reload behavior
+## Reload behaviour
 
 The running timer is saved on start, skip and completion. On reload:
 
